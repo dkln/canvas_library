@@ -1,0 +1,5 @@
+Usage:
+
+  <canvas id="the_screen"></canvas>
+
+  dc = new DisplayContainer("the_screen");
