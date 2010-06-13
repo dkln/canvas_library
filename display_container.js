@@ -1,22 +1,22 @@
 /**
+ * Main display container
+ *
  * @author D Lawson <webmaster@altovista.nl>
  */
-canvaslib.DisplayContainer = function(canvasId) {
-    this.init(canvasId);
-};
-
-canvaslib.DisplayContainer.prototype = {  
+canvaslib.DisplayContainer = new Class({
   // publics
   x: 0,
   y: 0,
   visible: true,
   alpha: 1,
   childs: [],  
+  _parent: null,
+  _canvas: null,
 
   /**
    * Initialization
    */
-  init: function(canvasId) {
+  initialize: function(canvasId) {
     if(canvasId)
       this._canvas = document.getElementById(canvasId);
   },
@@ -82,11 +82,6 @@ canvaslib.DisplayContainer.prototype = {
     }
   },
 
-  // semi_privates
-  _parent: null,
-
-  _canvas: null,
-
   /**
    * Draws all objects
    */ 
@@ -104,4 +99,4 @@ canvaslib.DisplayContainer.prototype = {
     
     }
   }
-};
+});

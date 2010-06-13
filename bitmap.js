@@ -1,10 +1,7 @@
-canvaslib.Bitmap = function() {
-  this.init();
-};
-
-canvaslib.Bitmap.prototype = {
-  init: function() {
+canvaslib.Bitmap = new Class({
+  extends: canvaslib.DisplayContainer,
+  
+  initialize: function() {
+    // something...
   }
-};
-
-canvaslib.extend(canvaslib.Bitmap, canvaslib.DisplayContainer);
+});
