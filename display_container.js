@@ -3,16 +3,14 @@
  *
  * @author D Lawson <webmaster@altovista.nl>
  */
-canvaslib.DisplayContainer = new Class({
-  // publics
-  x: 0,
-  y: 0,
-  visible: true,
-  alpha: 1,
+canvaslib.DisplayContainer = new Class({  
   childs: [],  
   _parent: null,
   _canvas: null,
+  _parentDisplayContainer: null,
 
+  extends: canvaslib.DisplayObject,
+  
   /**
    * Initialization
    */
@@ -32,40 +30,59 @@ canvaslib.DisplayContainer = new Class({
   /**
    * Returns the parent displaycontainer
    */
-  parent: function() {
-    return this._parent;
+  parentDisplayContainer: function() {
+    return this._parentDisplayContainer;
   },
 
   /**
    * Find super parent object
    */
-  super: function() {
-    return this._findParent(this);
+  superDisplayContainer: function() {
+    return this._findParentDisplayContainer(this);
   },
 
   /**
    * Tests if this object is the super
    */
-  isSuper: function() {
+  isSuperDisplayContainer: function() {
     return (this.super == this);
   },
 
   /**
    * Adds a given child to the displaylist of the object container
    */
-  addChild: function(child) {    
-    child._parent = this;
+  addChild: function(child) {
+    // is the object already a child of another display container? then remove it
+    if(child._parentDisplayContainer)
+      child._parentDisplayContainer.removeChild(child);
+      
+    // ok set new parent
+    child._parentDisplayContainer = this;
     this.childs.push(child);
+  },
+  
+  /**
+   * Sets Z-index of given child
+   */
+  setChildIndex: function(child, index) {
+    if(this.childs.indexOf(child) == -1) {
+      throw "Child object not found in displaylist";
+      
+    } else {
+      // @TODO implement me please!
+    }
   },
 
   /**
    * Removes the given child form the displaylist
    */
   removeChild: function(child) {
-    var i = this.childs.indexOf(child);
-  
-    if(i != -1) {
-    
+    if(this.childs.indexOf(child) == -1) {
+      throw "Child object not found in displaylist";
+      
+    } else {
+      this.childs.erase(child);
+      
     }
   },
 
@@ -74,28 +91,46 @@ canvaslib.DisplayContainer = new Class({
    */
   draw: function() {
     if(this.isSuper()) {
-      this._draw();
+      this._drawChildren();
     
     } else {
-      this.super.draw();
+      this.superDisplayContainer.draw();
     
     }
+  },
+  
+  _getX: function(x) {
+    return this.parentDisplayContainer().x + x;
+  },
+  
+  _getY: function(y) {
+    return this.parentDisplayContainer().y + y;
   },
 
   /**
    * Draws all objects
    */ 
-  _draw: function() {
+  _drawChildren: function() {
+    var i = 0;
+    
+    // respect the z-order
+    for(i = childs.length - 1; i >= 0; i--) {
+      childs[i]._draw();
+      childs[i]._drawChildren();
+    }
+  },
   
+  _draw: function() {
+    // you could implement this...
   },
 
   // privates
-  _findParent: function(parent) {
-    if(parent.parent) {
-      return this._findParent(parent);
+  _findParentDisplayContainer: function(parentDisplayContainer) {
+    if(parentDisplayContainer.parentDisplayContainer) {
+      return this._findParentDisplayContainer(parentDisplayContainer);
     
     } else {
-      return parent;
+      return parentDisplayContainer;
     
     }
   }

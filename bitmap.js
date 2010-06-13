@@ -3,5 +3,8 @@ canvaslib.Bitmap = new Class({
   
   initialize: function() {
     // something...
+  },
+  
+  _draw: function() {  
   }
 });

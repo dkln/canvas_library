@@ -3,6 +3,7 @@
     <title>Canvas Lib test</title>
     <script type="text/javascript" src="mootools-1.2.4-core-nc.js"></script>
     <script type="text/javascript" src="canvas_lib.js"></script>
+    <script type="text/javascript" src="display_object.js"></script>
     <script type="text/javascript" src="display_container.js"></script>
     <script type="text/javascript" src="bitmap.js"></script>
     <script type="text/javascript" src="stacked_loader.js"></script>
@@ -11,6 +12,10 @@
     <canvas id="test_canvas" width="320" height="240"></canvas>
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
+      var testObj = new canvaslib.DisplayContainer();
+      
+      mainDisplayObj.addChild(testObj);
+      mainDisplayObj.addChild(testObj);
     </script>
   </body>
 </html>
