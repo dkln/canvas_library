@@ -24,7 +24,7 @@ canvaslib.DisplayContainer = new Class({
   },
 
   canvas: function() {
-    this.super._canvas;
+    this.superDisplayContainer._canvas;
   },
 
   /**
@@ -45,7 +45,7 @@ canvaslib.DisplayContainer = new Class({
    * Tests if this object is the super
    */
   isSuperDisplayContainer: function() {
-    return (this.super == this);
+    return (this.superDisplayContainer == this);
   },
 
   /**
