@@ -80,7 +80,7 @@ canvaslib.DisplayContainer.prototype = {
     // is the object already a child of another display container? then remove it
     if(child._parentDisplayContainer)
       child._parentDisplayContainer.removeChild(child);
-      
+    
     // ok set new parent
     child._parentDisplayContainer = this;
     this.childs.push(child);
