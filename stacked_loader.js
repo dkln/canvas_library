@@ -1,7 +1,11 @@
 /**
  * @author D Lawson <webmaster@altovista.nl>
  */
-canvaslib.StackedLoader = new Class({
+canvaslib.StackedLoader = function() {
+  this.initialize();
+};
+
+canvaslib.StackedLoader.prototype = {
   initialize: function() {
   },
   
@@ -16,4 +20,4 @@ canvaslib.StackedLoader = new Class({
   
   // private
   _assets: []
-});
+};

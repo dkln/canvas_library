@@ -3,14 +3,32 @@
  *
  * @author D Lawson <webmaster@altovista.nl>
  */
-canvaslib.DisplayContainer = new Class({  
+ 
+canvaslib.DisplayContainer = function(canvasId) {
+  this.initialize(canvasId);
+};
+ 
+canvaslib.DisplayContainer.prototype = { 
+  // publics
+  id: '',
+  x: 0,
+  y: 0,
+  visible: true,
+  alpha: 1,
+  enabled: true,
+  width: 0,
+  height: 0,
+  scaleX: 1,
+  scaleY: 1,
+  _canvasX: 0,
+  _canvasY: 0,
+  _oldX: 0,
+  _oldY: 0,  
   childs: [],  
-  _parent: null,
   _canvas: null,
   _parentDisplayContainer: null,
+  _superDisplayContainer: null,
 
-  extends: canvaslib.DisplayObject,
-  
   /**
    * Initialization
    */
@@ -23,8 +41,11 @@ canvaslib.DisplayContainer = new Class({
     return this.canvas().getContext('2d');
   },
 
+  /**
+   * Returns the canvas
+   */
   canvas: function() {
-    this.super._canvas;
+    this.superDisplayContainer()._canvas;
   },
 
   /**
@@ -38,14 +59,18 @@ canvaslib.DisplayContainer = new Class({
    * Find super parent object
    */
   superDisplayContainer: function() {
-    return this._findParentDisplayContainer(this);
+    // cache search of super display container
+    if(!this._superDisplayContainer)
+      this._superDisplayContainer = this._findSuperDisplayContainer(this);
+
+    return this._superDisplayContainer;
   },
 
   /**
    * Tests if this object is the super
    */
   isSuperDisplayContainer: function() {
-    return (this.super == this);
+    return (this.superDisplayContainer() == this);
   },
 
   /**
@@ -81,6 +106,9 @@ canvaslib.DisplayContainer = new Class({
       throw "Child object not found in displaylist";
       
     } else {
+      child._superDisplayContainer = null;
+      child._parentDisplayContainer = null;
+      child._canvas = null;
       this.childs.erase(child);
       
     }
@@ -90,33 +118,107 @@ canvaslib.DisplayContainer = new Class({
    * Draws everyone
    */
   draw: function() {
-    if(this.isSuper()) {
-      this._drawChildren();
+    if(this.isSuperDisplayContainer()) {
+      this._drawAllChildren();
     
     } else {
-      this.superDisplayContainer.draw();
+      this.superDisplayContainer().draw();
     
     }
   },
   
-  _getX: function(x) {
-    return this.parentDisplayContainer().x + x;
+  /**
+   * Tests if the object's position has been changed
+   */
+  positionChanged: function() {
+    return (this.x != this._oldX || this.y != this._oldY);
   },
   
-  _getY: function(y) {
-    return this.parentDisplayContainer().y + y;
+  /**
+   * Translates relative X, Y pos to canvas/world X, Y pos
+   */
+  _getCanvasPosition: function(x, y) {
+    var translatedX = x;
+    var translatedY = y;
+    var theParent = parentDisplayContainer;
+    
+    while(theParent != null) {
+      translatedX += theParent.x;
+      translatedY += theParent.y;
+      theParent = theParent.parentDisplayContainer;
+    }
+    
+    return [translatedX, translatedY];
   },
-
+  
+  /**
+   * Translated relative X, Y pos to canvas/world X, Y pos
+   */
+  _setCanvasPosition: function() {
+    var newPos;
+    
+    if(this.positionChanged()) {
+      newPos = this._getCanvasPosition(this.x, this.y);
+      this._oldX = this.x;
+      this._oldY = this.y;
+      this.canvasX = newPos[0];
+      this.canvasY = newPos[1];
+    }
+  },
+    
   /**
    * Draws all objects
    */ 
-  _drawChildren: function() {
+  _drawAllChildren: function() {
+    var i = 0;
+    var children;
+    var newCanvasPos;
+
+    if(this.isSuperDisplayContainer()) {    
+      // retrieve ALL children
+      children = this._getAllChildren();
+      
+      // loop all children
+      for(i = 0; i < children.length; i++) {
+        // translate X, Y pos
+        children[i]._setCanvasPosition();
+        children[i]._draw();
+      }
+      
+    } else {
+      this.superDisplayContainer()._drawAllChildren();
+      
+    }
+  },
+  
+  /**
+   * Retrieves all children in the tree
+   */
+  _getAllChildren: function() {
+    var i = 0;
+    var children = [];
+    
+    if(this.isSuperDisplayContainer()) {
+      this._getChildren(this, children);
+      return children;
+      
+    } else {
+      return this.superDisplayContainer()._getAllChildren();
+      
+    }
+  },
+  
+  /**
+   * Retrieves ALL children from given parent and it's sub-childs
+   */
+  _getChildren: function(fromParent, collectedChildren) {
     var i = 0;
     
-    // respect the z-order
-    for(i = childs.length - 1; i >= 0; i--) {
-      childs[i]._draw();
-      childs[i]._drawChildren();
+    for(i = 0; i < fromParent.childs.length; i++) {
+      collectedChildren.push(fromParent.childs[i]);
+
+      if(fromParent.childs[i].childs && fromParent.childs[i].childs.length > 0)
+        this._getChildren(fromParent.childs[i], collectedChildren);
     }
   },
   
@@ -125,13 +227,13 @@ canvaslib.DisplayContainer = new Class({
   },
 
   // privates
-  _findParentDisplayContainer: function(parentDisplayContainer) {
-    if(parentDisplayContainer.parentDisplayContainer) {
-      return this._findParentDisplayContainer(parentDisplayContainer);
+  _findSuperDisplayContainer: function(parent) {
+    if(parent._parentDisplayContainer) {
+      return this._findSuperDisplayContainer(parent._parentDisplayContainer);
     
     } else {
-      return parentDisplayContainer;
+      return parent;
     
     }
   }
-});
+};

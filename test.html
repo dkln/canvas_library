@@ -1,9 +1,7 @@
 <html>
   <head>
     <title>Canvas Lib test</title>
-    <script type="text/javascript" src="mootools-1.2.4-core-nc.js"></script>
     <script type="text/javascript" src="canvas_lib.js"></script>
-    <script type="text/javascript" src="display_object.js"></script>
     <script type="text/javascript" src="display_container.js"></script>
     <script type="text/javascript" src="bitmap.js"></script>
     <script type="text/javascript" src="stacked_loader.js"></script>
@@ -12,10 +10,40 @@
     <canvas id="test_canvas" width="320" height="240"></canvas>
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
-      var testObj = new canvaslib.DisplayContainer();
+      mainDisplayObj.id = "main";
       
-      mainDisplayObj.addChild(testObj);
-      mainDisplayObj.addChild(testObj);
+      var a = new canvaslib.DisplayContainer();
+      a.id = "sub";
+      a.x = 10;
+      a.y = 10;
+      
+      mainDisplayObj.addChild(a);
+
+      var b = new canvaslib.DisplayContainer();
+      b.id = "sub2";
+      b.x = 5;
+      b.y = 5;
+      
+      mainDisplayObj.addChild(b);
+      
+      var c= new canvaslib.DisplayContainer();
+      c.id = "sub3";
+      c.x = 15;
+      c.y = 15;
+      
+      alert("ok");
+      
+      alert(mainDisplayObj.id + " > " + mainDisplayObj.childs);
+      alert(a.id + " > " + a.childs);
+      alert(b.id + " > " + b.childs);
+      alert(c.id + " > " + c.childs);
+      
+      b.addChild(c);      
+      
+      
+      //mainDisplayObj.draw();
+      
+            
     </script>
   </body>
 </html>

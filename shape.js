@@ -1,9 +1,15 @@
-canvaslib.Shape = new Class({
-  extends: canvaslib.DisplayContainer,
-  
+canvaslib.Shape = function() {
+  this.initialize();
+};
+
+canvaslib.Shape.prototype = {
   _drawingCommands: [],
   _cursorX: 0,
   _cursorY: 0,
+  
+  initialize: function() {
+    // something
+  },
   
   clear: function() {
     // removes all drawing instructions
@@ -42,4 +48,4 @@ canvaslib.Shape = new Class({
       // draw the stuff on the canvas
     }
   }
-});
+};
