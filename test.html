@@ -3,47 +3,25 @@
     <title>Canvas Lib test</title>
     <script type="text/javascript" src="canvas_lib.js"></script>
     <script type="text/javascript" src="display_container.js"></script>
-    <script type="text/javascript" src="bitmap.js"></script>
-    <script type="text/javascript" src="stacked_loader.js"></script>
+    <script type="text/javascript" src="shape.js"></script>
   </head>
   <body>
     <canvas id="test_canvas" width="320" height="240"></canvas>
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
       mainDisplayObj.id = "main";
-      
-      var a = new canvaslib.DisplayContainer();
-      a.id = "sub";
-      a.x = 10;
-      a.y = 10;
-      
-      mainDisplayObj.addChild(a);
 
-      var b = new canvaslib.DisplayContainer();
-      b.id = "sub2";
-      b.x = 5;
-      b.y = 5;
+      var someShape = new canvaslib.Shape();
+      someShape.id = "someShape";
+      someShape.x = 10;
+      someShape.y = 10;
+
+      someShape.fillStyle("rgba(0, 0, 0, 0)");
+      someShape.fillRect(0, 0, 50, 50);
       
-      mainDisplayObj.addChild(b);
-      
-      var c= new canvaslib.DisplayContainer();
-      c.id = "sub3";
-      c.x = 15;
-      c.y = 15;
-      
-      alert("ok");
-      
-      alert(mainDisplayObj.id + " > " + mainDisplayObj.childs);
-      alert(a.id + " > " + a.childs);
-      alert(b.id + " > " + b.childs);
-      alert(c.id + " > " + c.childs);
-      
-      b.addChild(c);      
-      
-      
-      //mainDisplayObj.draw();
-      
-            
+      mainDisplayObj.addChild(someShape);
+
+      mainDisplayObj.draw();
     </script>
   </body>
 </html>

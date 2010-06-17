@@ -1,14 +1,9 @@
+/**
+ * Bitmap
+ *
+ * @author D Lawson <webmaster@altovista.nl>
+ */
 canvaslib.Bitmap = function() {
-  this.initialize();
-};
-
-canvaslib.Bitmap.prototype = canvaslib.DisplayContainer;
-
-canvaslib.Bitmap.prototype = {
-  initialize: function() {
-    // something...
-  },
-  
-  _draw: function() {  
-  }
+  this.constructor = canvaslib.Bitmap;
+  canvaslib.DisplayContainer.call(this);
 };
