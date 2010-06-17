@@ -14,11 +14,12 @@ canvaslib.DisplayContainer = function(canvasId) {
   this.height = 0;
   this.scaleX = 1;
   this.scaleY = 1;
+  this.children = [];
+
   this._canvasX = 0;
   this._canvasY = 0;
   this._oldX = 0;
   this._oldY = 0;
-  this.children = [];
   this._canvas = null;
   this._context = null;
   this._parentDisplayContainer = null;
@@ -32,14 +33,14 @@ canvaslib.DisplayContainer = function(canvasId) {
   /**
    * Returns the parent displaycontainer
    */
-   this.parentDisplayContainer = function() {
+  this.parentDisplayContainer = function() {
     return this._parentDisplayContainer;
   };
 
   /**
    * Find super parent object
    */
-   this.superDisplayContainer = function() {
+  this.superDisplayContainer = function() {
     // cache search of super display container
     if(this._parentDisplayContainer) {
       if(!this._superDisplayContainer)
@@ -56,14 +57,14 @@ canvaslib.DisplayContainer = function(canvasId) {
   /**
    * Tests if this object is the super
    */
-   this.isSuperDisplayContainer = function() {
+  this.isSuperDisplayContainer = function() {
     return (this.superDisplayContainer() == this);
   };
 
   /**
    * Adds a given child to the displaylist of the object container
    */
-   this.addChild = function(child) {
+  this.addChild = function(child) {
     // is the object already a child of another display container? then remove it
     if(child._parentDisplayContainer)
       child._parentDisplayContainer.removeChild(child);
@@ -78,7 +79,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   /**
    * Sets Z-index of given child
    */
-   this.setChildIndex = function(child, index) {
+  this.setChildIndex = function(child, index) {
     if(this.children.indexOf(child) == -1) {
       throw "Child object not found in displaylist";
 

@@ -14,19 +14,26 @@ canvaslib.Shape = function() {
   this._alpha = 1;
   this._drawingCommands = [];
   
+  /**
+   * Clears all drawing commands
+   */
   this.clear = function() {
     // removes all drawing instructions
     this._drawingCommands = [];
   };
   
-  // moves the cursor to X Y
+  /**
+   * Moves the cursor to X Y
+   */
   this.moveTo = function(x, y) {
     this._cursorX = x;
     this._cursorY = y;
     this._drawingCommands.push(['moveTo', x, y]);
   };
 
-  // draws a line from cursor to X Y pos
+  /**
+   * Draws a line from cursor to X Y pos
+   */
   this.lineTo = function(x, y) {
     this._drawingCommands.push(['lineTo', x, y]);
   };
@@ -50,7 +57,7 @@ canvaslib.Shape = function() {
   
   // draws a circle
   this.fillStyle = function(color) {
-    this._drawingCommands.push(['fillStyle', color]);
+    this._drawingCommands.push(['fillStyle=', color]);
   };
   
   // draws path
@@ -64,7 +71,7 @@ canvaslib.Shape = function() {
   };
   
   this.globalAlpha = function(alpha) {
-    this._drawCommands.push(['globalAlpha', alpha]);
+    this._drawCommands.push(['globalAlpha=', alpha]);
   };
   
   // fills everything
@@ -80,18 +87,27 @@ canvaslib.Shape = function() {
     var param;
     
     this._context.save();
+    
+    // set start X and Y pos to the real-world-canvas-XY
     this._context.translate(this._canvasX, this._canvasY);
     
     for(i = 0; i < this._drawingCommands.length; i++) {
       // draw the stuff on the canvas      
       // does the drawing command have any params?
-      if(this._drawingCommands[i].length > 1) {
+      // setter?
+      if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
+        this._context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
+        console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
+        
+      } else if(this._drawingCommands[i].length > 1) {
         // yes translate them
-        this._context[this._drawingCommands[i][0]].call(this, this._drawingCommands[i].slice(1));
+        this._context[this._drawingCommands[i][0]].apply(this._context, this._drawingCommands[i].slice(1));
+        console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
         
       } else {
         // nope!
         this._context[this._drawingCommands[i][0]]();
+        console.log(this._drawingCommands[i][0] + "()");
                 
       }
     }
