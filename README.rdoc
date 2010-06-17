@@ -1,0 +1,33 @@
+= HTML Canvas Javascript Library (in the works)
+
+Especially handy when you're used to the structure of Flash / Actionscript 3.0. But also very cool if just want to add simpe animations to a canvas and don't want to do all the stuff yourself.
+
+== Simple demo
+
+HTML:
+  <canvas id="test_canvas" width="320" height="240"></canvas>
+
+Javascript:
+  var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
+
+  var someShape = new canvaslib.Shape();
+  someShape.x = 10;
+  someShape.y = 10;
+
+  someShape.fillStyle("rgba(0, 0, 0, 255)");
+  someShape.fillRect(0, 0, 50, 50);
+
+  mainDisplayObj.addChild(someShape);
+
+  var renderer = new canvaslib.Renderer(mainDisplayObj);
+  
+  // framehandlers will be called every frame update
+  renderer.addFrameHandler( function() { someShape.x++ });
+  
+  // runs the render process for 25fps
+  renderer.run(25);
+  
+= License and credits
+Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
+
+Copyright 2010, Diederick Lawson - Altovista. Released under the BSD license.
