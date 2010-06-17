@@ -134,7 +134,7 @@ canvaslib.Shape = function() {
     
     // set start X and Y pos to the real-world-canvas-XY
     this._context.translate(this._canvasX, this._canvasY);
-    this._context.rotate(this.rotation * Math.PI / 180);
+    this._context.rotate(canvaslib.Math.angleToRadians(this.rotation));
     
     for(i = 0; i < this._drawingCommands.length; i++) {
       // draw the stuff on the canvas      

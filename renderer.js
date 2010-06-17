@@ -1,3 +1,8 @@
+/**
+ * Renderer
+ *
+ * @author D Lawson <webmaster@altovista.nl>
+ */
 canvaslib.Renderer = function(mainContainer, fps) {
   this._timer = null;
   this._running = false;
