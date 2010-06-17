@@ -4,6 +4,8 @@
     <script type="text/javascript" src="canvas_lib.js"></script>
     <script type="text/javascript" src="display_container.js"></script>
     <script type="text/javascript" src="shape.js"></script>
+    <script type="text/javascript" src="renderer.js"></script>
+    <script type="text/javascript" src="tween.js"></script>
   </head>
   <body>
     <canvas id="test_canvas" width="320" height="240"></canvas>
@@ -21,7 +23,9 @@
       
       mainDisplayObj.addChild(someShape);
 
-      mainDisplayObj.draw();
+      var renderer = new canvaslib.Renderer(mainDisplayObj);
+      renderer.addFrameHandler( function() { someShape.x++ });
+      renderer.run(25);
     </script>
   </body>
 </html>

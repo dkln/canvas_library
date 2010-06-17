@@ -109,12 +109,12 @@ canvaslib.DisplayContainer = function(canvasId) {
   /**
    * Draws everyone
    */
-  this.draw = function() {
+  this.draw = function(clear) {
     if(this.isSuperDisplayContainer()) {
-      this._drawAllChildren();
+      this._drawAllChildren(clear);
 
     } else {
-      this.superDisplayContainer().draw();
+      this.superDisplayContainer().draw(clear);
 
     }
   };
@@ -162,18 +162,17 @@ canvaslib.DisplayContainer = function(canvasId) {
   /**
    * Draws all objects
    */ 
-  this._drawAllChildren = function() {
+  this._drawAllChildren = function(clear) {
     var i = 0;
     var children;
     var newCanvasPos;
 
     if(this.isSuperDisplayContainer()) {
+      if(clear) this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        
       // retrieve ALL children
       children = this._getAllChildren();
       
-      // clear canvas
-      this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-
       // loop all children
       for(i = 0; i < children.length; i++) {
         // translate X, Y pos
@@ -186,7 +185,7 @@ canvaslib.DisplayContainer = function(canvasId) {
 
     }
   };
-
+  
   /**
    * Retrieves all children in the tree
    */

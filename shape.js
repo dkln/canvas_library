@@ -97,17 +97,17 @@ canvaslib.Shape = function() {
       // setter?
       if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
         this._context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
-        console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
+        //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
         
       } else if(this._drawingCommands[i].length > 1) {
         // yes translate them
         this._context[this._drawingCommands[i][0]].apply(this._context, this._drawingCommands[i].slice(1));
-        console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
+        //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
         
       } else {
         // nope!
         this._context[this._drawingCommands[i][0]]();
-        console.log(this._drawingCommands[i][0] + "()");
+        //console.log(this._drawingCommands[i][0] + "()");
                 
       }
     }
