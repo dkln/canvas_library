@@ -1,12 +1,12 @@
 /**
- * Tweening library
+ * Tweening library inspired by TweenLite
  *
  * @author D Lawson <webmaster@altovista.nl>
  */
 canvaslib.Tween = new function() {
   this._tweens = [];
   
-  this.to = function(obj, delay, toParams) {
+  this.to = function(obj, delay, toParams, waitToFinish) {
     
   };
   
@@ -14,7 +14,11 @@ canvaslib.Tween = new function() {
     
   };
   
+  this.kill = function(obj) {
+    
+  };
+  
   this.update = function() {
     
   };
-}
+};

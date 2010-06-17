@@ -6,7 +6,19 @@ Also very cool if just want to add simpe animations to a canvas and don't want t
 
 Not tested, but... it should run on an iPad ;)
 
-== Simple demo
+== Classes
+The canvaslib consists of the following classes:
+* canvaslib.DisplayContainer: basic graphical object and drawer
+* canvaslib.Shape: graphical object that holds a shape
+* canvaslib.Renderer: class that manages rendering for animations
+* canvaslib.StackedLoader: class that manages downloads for images or audiosamples
+* canvaslib.Tween: class that manages animations for all displayobject's
+
+Note that the canvaslib.Tween & canvaslib.StackedLoader classes are singletons.
+
+== Getting started
+
+A very simple demo.
 
 HTML:
   <canvas id="test_canvas" width="320" height="240"></canvas>
@@ -33,9 +45,9 @@ Javascript:
   
 == About DisplayContainer's
 
-A DisplayContainer is just an object that holds graphical objects. These graphical objects can be nested in each other. Just like <div>'s in <div>'s.
+A DisplayContainer is an object that can hold other graphical objects. These graphical objects can be nested in eachother. Just like <div>'s in <div>'s.
 
-The X and Y position of graphical objects are relative and are translated to canvas X and Y positions during the rendering process.
+The X and Y position of graphical objects are relative and are translated to canvas X and Y positions during the rendering process. This rendering process can be triggered by calling the draw() function on any displaycontainer.
 
 Nesting objects:
   var obj = new canvaslib.Shape();
@@ -54,6 +66,8 @@ Nesting objects:
   
   otherObj.addChild(yetAnotherObj);
   
+  obj.draw();
+  
 == Drawing shapes
 
 The drawing API is almost the same as the Canvas drawing API (for 2 contexts).
@@ -71,6 +85,10 @@ Drawing rectangles:
   rect.fillRect(10, 10, 25, 25);
   
   screen.addChild(rect);
+  
+  screen.draw();
+  
+== Animating
   
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!

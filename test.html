@@ -6,6 +6,7 @@
     <script type="text/javascript" src="shape.js"></script>
     <script type="text/javascript" src="renderer.js"></script>
     <script type="text/javascript" src="tween.js"></script>
+    <script type="text/javascript" src="stacked_loader.js"></script>
   </head>
   <body>
     <canvas id="test_canvas" width="320" height="240"></canvas>
@@ -27,7 +28,13 @@
       mainDisplayObj.addChild(someShape);
 
       var renderer = new canvaslib.Renderer(mainDisplayObj);
-      renderer.addFrameHandler( function() { someShape.x++ });
+      
+      renderer.addFrameHandler( function() { 
+        someShape.x += .5; 
+        someShape.y += .5;
+        someShape.rotation++;
+      });
+      
       renderer.run(25);
     </script>
   </body>

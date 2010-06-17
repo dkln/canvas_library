@@ -23,6 +23,50 @@ canvaslib.Shape = function() {
   };
   
   /**
+   *
+   */
+  this.addColorStops = function(gradient, colorStops) {
+    var i = 0;
+    
+    for(i = 0; i < colorStops.length; i++) {
+      gradient.addColorStop(colorStops[i][0], colorStops[i][1]);
+    }
+    
+    return gradient;
+  };
+  
+  /**
+   * Creates a radial gradient object
+   */
+  this._createRadialGradient = function(x1, y1, x2, y2, r1, colorStops) {
+    var gradient = this._context.createRadialGradient(x1, y1, x2, y2, r1);
+    this.addColorStop(gradient, colorStops);
+        
+    return gradient;
+  };
+  
+  this._createLinearGradient = function(x1, y1, x2, y2, colorStops) {
+    var gradient = this._context.createLinearGradient(x1, y1, x2, y2);
+    this.addColorStop(gradient, colorStops);
+    
+    return gradient;
+  };
+  
+  /**
+   * Sets the radial gradient fill
+   */
+  this.setRadialGradient = function(x1, y1, x2, y2, r1, colorStops) {
+    this.fillStyle(this._createRadialGradient(x1, y1, x2, y2, r1, colorStops));
+  };
+  
+  /**
+   * Sets the linear gradient fill
+   */
+  this.setLinearGradient = function(x1, y1, x2, y2, colorStops) {
+    this.fillStyle(this._createLinearGradient(x1, y1, x2, y2, colorStops));
+  };
+  
+  /**
    * Moves the cursor to X Y
    */
   this.moveTo = function(x, y) {
@@ -90,6 +134,7 @@ canvaslib.Shape = function() {
     
     // set start X and Y pos to the real-world-canvas-XY
     this._context.translate(this._canvasX, this._canvasY);
+    this._context.rotate(this.rotation * Math.PI / 180);
     
     for(i = 0; i < this._drawingCommands.length; i++) {
       // draw the stuff on the canvas      
