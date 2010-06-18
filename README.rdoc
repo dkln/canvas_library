@@ -1,10 +1,9 @@
 = HTML Canvas Javascript Library (in the works)
 
-Handy when you're used to the structure of Flash / Actionscript 3.0 but you just want to use Javascript. 
+Handy for those who're used to the nature of Flash / Actionscript 3.0 (with all the nice nested DisplayContainers) but you just want to use Javascript because it's cool and open. 
 
-Also very cool if just want to add simpe animations to a canvas and don't want to do all the stuff yourself. 
-
-Not tested, but... it should run on an iPad ;)
+Note: this is NOT a Flash SWF parser for HTML 5 canvas.
+Note 2: Not tested, but... it should run on an iPad or iPhone ;)
 
 == Classes
 The canvaslib consists of the following classes:
