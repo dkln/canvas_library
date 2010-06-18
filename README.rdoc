@@ -95,6 +95,9 @@ Bitmaps can easily be loaded with the StackedLoader. The StackedLoader manages a
   var bitmap;
   
   canvaslib.StackedLoader.load("image_id", "image", "logo.png");
+  canvaslib.StackedLoader.load("another_image", "image", "foo.png");
+  canvaslib.StackedLoader.load("and_another_one", "image", "bar.png");
+  
   canvaslib.StackedLoader.start(onLoadComplete);
   
   function onLoadComplete() {
@@ -108,6 +111,18 @@ The +load+ function adds an asset to the loadstack. The +start+ function trigger
 
 == Animating objects
 
+You can use the canvaslib.Tween class to tween objects between two points.
+
+  ...
+  var renderer = new canvaslib.Renderer(mainDisplayObj);            
+  renderer.run(25);
+  
+  ...
+  canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 });
+  
+The above example will tween the +x+ & +y+ property of object +someShape+ to coordinate 100 in 5 secs.
+
+Note: to use the Tween engine, you'll need to seed up a renderer (canvaslib.Renderer).
   
 == Todo/notes
 * add bitmap support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
