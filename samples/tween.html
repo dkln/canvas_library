@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>Canvas Lib test</title>    
+    <script type="text/javascript" src="../src/canvas_lib.js"></script>
+    <script type="text/javascript" src="../src/utils.js"></script>
+    <script type="text/javascript" src="../src/display_container.js"></script>
+    <script type="text/javascript" src="../src/shape.js"></script>
+    <script type="text/javascript" src="../src/renderer.js"></script>
+    <script type="text/javascript" src="../src/tween.js"></script>
+    <script type="text/javascript" src="../src/math.js"></script>
+  </head>
+  <body>
+    <canvas id="test_canvas" width="320" height="240"></canvas>
+    <script type="text/javascript">
+      var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
+      mainDisplayObj.id = "main";
+
+      var someShape = new canvaslib.Shape();
+      someShape.id = "someShape";
+      someShape.x = 0;
+      someShape.y = 0;
+
+      someShape.fillStyle("rgba(0, 0, 0, 1)");
+      someShape.fillRect(0, 0, 50, 50);  
+      
+      mainDisplayObj.addChild(someShape);          
+
+      var renderer = new canvaslib.Renderer(mainDisplayObj);            
+      renderer.run(25);
+      
+      canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 })
+    </script>
+  </body>
+</html>
