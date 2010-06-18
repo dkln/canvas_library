@@ -4,10 +4,10 @@
  * @author D Lawson <webmaster@altovista.nl>
  */
 canvaslib.StackedLoader = {
-  _onCompleteHandlers: [];
-  _loadStack: [];
-  _stack: {};
-  _loading: false;
+  _onCompleteHandlers: [],
+  _loadStack: [],
+  _stack: {},
+  _loading: false,
   
   /**
    * Starts loading an item (audio or image)
