@@ -17,7 +17,7 @@ canvaslib.StackedLoader = {
     if(this._stack[id])
       this.remove(id);
       
-    this._loadStack.push({ type: type, url: url });
+    this._loadStack.push({ type: type, url: url, id: id });
   },
     
   /**
@@ -41,6 +41,18 @@ canvaslib.StackedLoader = {
   },
   
   _handleAssetLoadComplete: function() {
+    var image;
+    
+    // check if this is a image so convert it in a bitmap obj
+    if(this._toLoad.type == 'image') {
+      image = this._stack[this._toLoad.id];
+      image.onload = null;
+      
+      this._stack[this._toLoad.id] = new canvaslib.Bitmap(image);
+      
+      image = null;
+    }
+    
     // ok we're done with this item matey! remove it from stack
     this._loadStack.splice(0, 1);
     
@@ -69,20 +81,20 @@ canvaslib.StackedLoader = {
       
     } else {
       // yes catch first item of stack
-      this.toLoad = this._loadStack[0];
+      this._toLoad = this._loadStack[0];
       
-      switch(toLoad.type) {
+      switch(this._toLoad.type) {
         case 'image':
-          this._stack[this.toLoad.id] = new Image();  
+          this._stack[this._toLoad.id] = new Image();  
           break;
           
         case 'audio':
-          this._stack[this.toLoad.id] = new Audio();
+          this._stack[this._toLoad.id] = new Audio();
           break;
       }
 
-      this._stack[this.toLoad.id].onLoad = this._handleAssetLoadComplete;
-      this._stack[this.toLoad.id].src = this._stack[this.toLoad.id].url;      
+      this._stack[this._toLoad.id].onload = canvaslib.Utils.bind(this, this._handleAssetLoadComplete);
+      this._stack[this._toLoad.id].src = this._toLoad.url;
     }
   }
 };

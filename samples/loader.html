@@ -5,6 +5,7 @@
     <script type="text/javascript" src="../src/utils.js"></script>
     <script type="text/javascript" src="../src/display_container.js"></script>
     <script type="text/javascript" src="../src/shape.js"></script>
+    <script type="text/javascript" src="../src/bitmap.js"></script>
     <script type="text/javascript" src="../src/renderer.js"></script>
     <script type="text/javascript" src="../src/tween.js"></script>
     <script type="text/javascript" src="../src/math.js"></script>
@@ -15,6 +16,30 @@
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
       mainDisplayObj.id = "main";
+      
+      var bitmap;
+      
+      canvaslib.StackedLoader.load("logo", "image", "logo.png");
+      canvaslib.StackedLoader.start( function() {
+        bitmap = canvaslib.StackedLoader.get("logo");        
+        mainDisplayObj.addChild(bitmap);
+      });
+      
+      var someShape = new canvaslib.Shape();
+      mainDisplayObj.addChild(someShape);
+            
+      someShape.setRadialGradient(50, 50, 0, 50, 50, 50, [[0, 'rgba(255, 0, 0, 1)'], [1, 'rgba(0, 255, 0, 1)']]);
+      someShape.fillRect(0, 0, 50, 50);
+      
+      var renderer = new canvaslib.Renderer(mainDisplayObj);
+
+      renderer.addFrameHandler( function() { 
+        bitmap.rotation++;
+        
+        if(bitmap.rotation > 359) bitmap.rotation = 0;
+      });
+      
+      renderer.run(25);
     </script>
   </body>
 </html>

@@ -88,6 +88,27 @@ Drawing rectangles:
   
   screen.draw();
   
+== Loading and drawing bitmaps
+
+Bitmaps can easily be loaded with the StackedLoader. The StackedLoader manages all your assets so you can preload images or audio assets before starting your canvas application.
+  var screen = new canvaslib.DisplayContainer("the_screen");
+  var bitmap;
+  
+  canvaslib.StackedLoader.load("image_id", "image", "logo.png");
+  canvaslib.StackedLoader.start(onLoadComplete);
+  
+  function onLoadComplete() {
+    bitmap = canvaslib.StackedLoader.get("image_id");
+    
+    screen.addChild(bitmap);
+    screen.draw();
+  }
+  
+The +load+ function adds an asset to the loadstack. The +start+ function triggers the StackedLoader to load all assets that are placed in the load stack.
+
+== Animating objects
+
+  
 == Todo/notes
 * add bitmap support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
 * finalize stackedloader

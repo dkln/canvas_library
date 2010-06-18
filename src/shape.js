@@ -44,8 +44,8 @@ canvaslib.Shape.prototype = {
   /**
    * Creates a radial gradient object
    */
-  _createRadialGradient: function(x1, y1, x2, y2, r1, colorStops) {
-    var gradient = this._context.createRadialGradient(x1, y1, x2, y2, r1);
+  _createRadialGradient: function(x1, y1, r1, x2, y2, r2, colorStops) {
+    var gradient = this._context.createRadialGradient(x1, y1, r1, x2, y2, r2);
     this.addColorStops(gradient, colorStops);
         
     return gradient;
@@ -61,8 +61,8 @@ canvaslib.Shape.prototype = {
   /**
    * Sets the radial gradient fill
    */
-  setRadialGradient: function(x1, y1, x2, y2, r1, colorStops) {
-    this.fillStyle(this._createRadialGradient(x1, y1, x2, y2, r1, colorStops));
+  setRadialGradient: function(x1, y1, r1, x2, y2, r2, colorStops) {
+    this.fillStyle(this._createRadialGradient(x1, y1, r1, x2, y2, r2, colorStops));
   },
   
   /**
