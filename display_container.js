@@ -15,8 +15,8 @@ canvaslib.DisplayContainer = function(canvasId) {
    this.height = 0;
    this.scaleX = 1;
    this.scaleY = 1;
-   this.children = [];
-
+   this.children = [];   
+   
    this._canvasX = 0;
    this._canvasY = 0;
    this._oldX = 0;
