@@ -13,22 +13,28 @@
     <canvas id="test_canvas" width="320" height="240"></canvas>
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
-      mainDisplayObj.id = "main";
 
       var someShape = new canvaslib.Shape();
-      someShape.id = "someShape";
+      someShape.id = "shape1";
       someShape.x = 0;
       someShape.y = 0;
 
       someShape.fillStyle("rgba(0, 0, 0, 1)");
       someShape.fillRect(0, 0, 50, 50);  
       
+      var otherShape = new canvaslib.Shape();
+      otherShape.id = "shape2";
+      otherShape.fillStyle("rgba(255, 0, 0, .5)");
+      otherShape.fillRect(0, 0, 25, 25);
+      
       mainDisplayObj.addChild(someShape);          
+      mainDisplayObj.addChild(otherShape);
 
       var renderer = new canvaslib.Renderer(mainDisplayObj);            
       renderer.run(25);
       
       canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 })
+      canvaslib.Tween.to(otherShape, 20000, { rotation: 180, x: 320, y: 200 });
     </script>
   </body>
 </html>

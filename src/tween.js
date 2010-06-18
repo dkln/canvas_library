@@ -56,13 +56,17 @@ canvaslib.Tween = {
       }      
       
       // remove all finished tweens from mem
-      if(cleanup) {
-        for(i = 0; i < this._tweens.length; i++) {
-          if(!this._tweens[i]) {
-            this._tweens[i].splice(i, 1);
-            i = -1;
-          }
-        }
+      if(cleanup) this._cleanup();
+    }
+  },
+  
+  _cleanup: function() {
+    var i;
+    
+    for(i = 0; i < this._tweens.length; i++) {
+      if(!this._tweens[i]) {
+        this._tweens.splice(i, 1);
+        i = -1;
       }
     }
   }
