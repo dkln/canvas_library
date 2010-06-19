@@ -3,7 +3,7 @@
  *
  * @author D Lawson <webmaster@altovista.nl>
  */
- 
+
 canvaslib.DisplayContainer = function(canvasId) {
    this.id = '';
    this.rotation = 0;
@@ -15,8 +15,9 @@ canvaslib.DisplayContainer = function(canvasId) {
    this.height = 0;
    this.scaleX = 1;
    this.scaleY = 1;
-   this.children = [];   
-   
+   this.children = [];
+   this.visible = true;
+
    this._canvasX = 0;
    this._canvasY = 0;
    this._oldX = 0;
@@ -27,18 +28,20 @@ canvaslib.DisplayContainer = function(canvasId) {
    this._context = null;
    this._parentDisplayContainer = null;
    this._superDisplayContainer = null;
+   this._childrenChanged = false;
+   this._allChildren = null;
 
    if(canvasId) {
      this._canvas = document.getElementById(canvasId);
      this._context = this._canvas.getContext('2d');
-     
+
      this._backBufferCanvas = document.createElement('canvas');
      this._backBufferCanvas.width = this._canvas.width;
      this._backBufferCanvas.height = this._canvas.height;
      this._backBufferContext = this._backBufferCanvas.getContext('2d');
    }
 };
- 
+
 canvaslib.DisplayContainer.prototype = {
   /**
    * Returns the parent displaycontainer
@@ -57,10 +60,10 @@ canvaslib.DisplayContainer.prototype = {
         this._superDisplayContainer = this._findSuperDisplayContainer(this);
 
       return this._superDisplayContainer;
-      
+
     } else {
       return this;
-      
+
     }
   },
 
@@ -75,6 +78,8 @@ canvaslib.DisplayContainer.prototype = {
    * Adds a given child to the displaylist of the object container
    */
   addChild: function(child) {
+    this.superDisplayContainer()._childrenChanged = true;
+
     // is the object already a child of another display container? then remove it
     if(child._parentDisplayContainer)
       child._parentDisplayContainer.removeChild(child);
@@ -85,10 +90,10 @@ canvaslib.DisplayContainer.prototype = {
     child._canvas = this.superDisplayContainer()._canvas;
     child._backBufferCanvas = this.superDisplayContainer()._backBufferCanvas;
     child._backBufferContext = this.superDisplayContainer()._backBufferContext;
-    
+
     // add to displaylist
     this.children.push(child);
-    
+
     return this;
   },
 
@@ -96,11 +101,13 @@ canvaslib.DisplayContainer.prototype = {
    * Sets Z-index of given child
    */
   setChildIndex: function(child, index) {
+
     if(this.children.indexOf(child) == -1) {
       throw "Child object not found in displaylist";
 
     } else {
       // @TODO implement me please!
+      this.superDisplayContainer()._childrenChanged = true;
     }
   },
 
@@ -109,22 +116,24 @@ canvaslib.DisplayContainer.prototype = {
    */
   removeChild: function(child) {
     var i;
-    
+
     i = this.children.indexOf(child); // [0, 1, 2, 3, 4, 5, 6, 7]
-    
+
     if(i == -1) {
       throw "Child object not found in displaylist";
 
     } else {
+      this.superDisplayContainer()._childrenChanged = true;
+
       child._superDisplayContainer = null;
       child._parentDisplayContainer = null;
       child._canvas = null;
       child._context = null;
       child._backBufferCanvas = null;
       child._backBufferContext = null;
-      
+
       this.children.splice(i, 1);
-      
+
       return this;
     }
   },
@@ -160,10 +169,10 @@ canvaslib.DisplayContainer.prototype = {
     while(theParent != null) {
       translatedX += theParent.x;
       translatedY += theParent.y;
-      
+
       theParent = theParent._parentDisplayContainer;
     }
-    
+
     return [translatedX, translatedY];
   },
 
@@ -184,7 +193,7 @@ canvaslib.DisplayContainer.prototype = {
 
   /**
    * Draws all objects
-   */ 
+   */
   _drawAllChildren: function(clear) {
     var i = 0;
     var children;
@@ -192,15 +201,18 @@ canvaslib.DisplayContainer.prototype = {
 
     if(this.isSuperDisplayContainer()) {
       if(clear) this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-        
+
       // retrieve ALL children
-      children = this._getAllChildren();
-      
+      if(this._childrenChanged) {
+        this._allChildren = this._getAllChildren();
+        this._childrenChanged = false;
+      }
+
       // loop all children
-      for(i = 0; i < children.length; i++) {
+      for(i = 0; i < this._allChildren.length; i++) {
         // translate X, Y pos
-        children[i]._setCanvasPosition();
-        children[i]._draw();
+        this._allChildren[i]._setCanvasPosition();
+        if(this._allChildren[i].visible) this._allChildren[i]._draw();
       }
 
     } else {
@@ -208,7 +220,7 @@ canvaslib.DisplayContainer.prototype = {
 
     }
   },
-  
+
   /**
    * Retrieves all children in the tree
    */
