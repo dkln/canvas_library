@@ -180,14 +180,22 @@ canvaslib.Shape.prototype = {
     if(!this._madeChanges && this.bitmapCache) {
       // draw to our backbuffer
       context.save();
+      //context.globalCompositeOperation = 'destination-atop';
       context.translate(this._canvasX, this.canvasY);
+
       context.rotate(canvaslib.Math.angleToRadians(this.rotation));
-      context.putImageData(this._imageData, 0, 0);
+
+      // @TODO W3C epic fail... putImageData cannot handle transparency because that would make it usefull
+      //
+      //context.putImageData(this._imageData, 0, 0);
+      //context.drawImage(this._imageData, 0, 0);
+      context.drawImage(this._backBufferCanvas, 0, 0);
       //context.drawImage(this._imageData, 0, 0);
 
     } else {
       context.save();
 
+      // sets the alpha of the image
       context.globalAlpha = this.alpha;
 
       // set start X and Y pos to the real-world-canvas-XY
@@ -223,14 +231,14 @@ canvaslib.Shape.prototype = {
       }
 
       context.restore();
-      if(this.bitmapCache) this._cacheBitmap();
+      if(this.bitmapCache && this._madeChanges) this._cacheBitmap();
     }
 
     this._madeChanges = false;
   },
 
   _cacheBitmap: function() {
-    this._imageData = this._backBufferContext.getImageData(this._canvasX, this._canvasY, this._canvas.width - this._canvasX, this._canvas.height - this._canvasY);
+    this._imageData = this._backBufferContext.getImageData(0, 0, this._canvas.width, this._canvas.height);
   }
 };
 
