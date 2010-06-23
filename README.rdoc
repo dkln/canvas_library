@@ -2,9 +2,9 @@
 
 Handy for those who're used to the nature of Flash / Actionscript 3.0 (with all the nice nested DisplayContainers) but you just want to use Javascript because it's cool and open. 
 
-Note: this is NOT a Flash SWF parser for HTML 5 canvas.
+Tested on iPhone. Demo's do not run very smooth but is is a beginning!
 
-Note 2: Not tested, but... it should run on an iPad or iPhone ;)
+Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
 == Classes
 The canvaslib consists of the following classes:
@@ -129,8 +129,7 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
   
 == Todo/notes
 * add bitmap support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
-* finalize stackedloader
-* finalize tweening class
+* add more easing modules
 * ...
 
   
