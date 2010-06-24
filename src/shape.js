@@ -103,6 +103,21 @@ canvaslib.Shape.prototype = {
   },
 
   /**
+   * Draws a circle
+   */
+  circle: function(x, y, radius) {
+    this.arc(x, y, 0, Math.PI * 2, true);
+  },
+
+  /**
+   * Draws arc from start to end radius
+   */
+  arc: function(x, y, startRadius, endRadius, antiClockwise) {
+    this._madeChanges = true;
+    this._drawingCommands.push(['arc', x, y, startRadius, endRadius, antiClockwise]);
+  },
+
+  /**
    * Drawa rectangle with only a stroke
    */
   strokeRect: function(x, y, width, height, color) {
