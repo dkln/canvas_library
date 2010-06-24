@@ -135,7 +135,10 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
 * add more easing modules
 * finalize text_field class
 * add more transformation options to shape and bitmap
-* ...
+* shadows
+* lineWidth / lineCap etc.
+* focus management
+* globalCompositeOperation etc.
 
   
 = License and credits
