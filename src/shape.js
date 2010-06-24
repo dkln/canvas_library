@@ -197,7 +197,7 @@ canvaslib.Shape.prototype = {
       context.save();
       //context.globalCompositeOperation = 'destination-atop';
       context.translate(this._canvasX, this.canvasY);
-
+      context.scale(this.scaleX, this.scaleY);
       context.rotate(canvaslib.Math.angleToRadians(this.rotation));
 
       // @TODO W3C epic fail... putImageData cannot handle transparency because that would make it usefull
@@ -222,6 +222,7 @@ canvaslib.Shape.prototype = {
       } else {
         context.translate(this._canvasX, this._canvasY);
         context.rotate(canvaslib.Math.angleToRadians(this.rotation));
+        context.scale(this.scaleX, this.scaleY);
       }
 
       for(i = 0; i < this._drawingCommands.length; i++) {

@@ -44,12 +44,16 @@
         if(side) {
           someShape.x += .5;
           someShape.y += .5;
+          someShape.scaleX += .01;
+          someShape.scaleY += .01;
 
           if(someShape.x >= 320 || someShape.y >= 240) side = false;
 
         } else {
           someShape.x -= .5;
           someShape.y -= .5;
+          someShape.scaleX -= .01;
+          someShape.scaleY -= .01;
 
           if(someShape.x < 0 || someShape.y < 0) side = true;
         }
