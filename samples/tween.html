@@ -27,6 +27,8 @@
       otherShape.alpha = .5;
       otherShape.fillStyle("rgba(255, 0, 0, .5)");
       otherShape.fillRect(0, 0, 25, 25);
+      otherShape.scaleX = .1;
+      otherShape.scaleY = .1;
 
       mainDisplayObj.addChild(someShape);
       mainDisplayObj.addChild(otherShape);
@@ -35,7 +37,7 @@
       renderer.run(25);
 
       canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 })
-      canvaslib.Tween.to(otherShape, 20000, { rotation: 180, x: 320, y: 200, alpha: 1 });
+      canvaslib.Tween.to(otherShape, 20000, { rotation: 180, x: 320, y: 200, alpha: 1, scaleX: 1, scaleY: 1 });
     </script>
   </body>
 </html>

@@ -18,10 +18,17 @@ canvaslib.DisplayContainer = function(canvasId) {
    this.children = [];
    this.visible = true;
 
-   this._canvasX = 0;
-   this._canvasY = 0;
    this._oldX = 0;
    this._oldY = 0;
+   this._oldRotation = 0;
+   this._oldScaleX = 1;
+   this._oldScaleY = 1;
+
+   this._canvasX = 0;
+   this._canvasY = 0;
+   this._rotation = 0;
+   this._scaleX = 1;
+   this._scaleY = 1;
    this._canvas = null;
    this._backBufferCanvas = null;
    this._backBufferContext;
@@ -155,25 +162,33 @@ canvaslib.DisplayContainer.prototype = {
    * Tests if the object's position has been changed
    */
   positionChanged: function() {
-    return (this.x != this._oldX || this.y != this._oldY);
+    return (  this.x != this._oldX || this.y != this._oldY ||
+              this.rotation != this._oldRotation ||
+              this.scaleX != this._oldScaleX || this.scaleY != this._oldScaleY );
   },
 
   /**
    * Translates relative X, Y pos to canvas/world X, Y pos
    */
-  _getCanvasPosition: function(x, y) {
+  _getTranslatedCanvasPositions: function() {
     var translatedX = 0;
     var translatedY = 0;
+    var translatedRotation = 0;
+    var translatedScaleX = 0;
+    var translatedScaleY = 0;
     var theParent = this;
 
     while(theParent != null) {
       translatedX += theParent.x;
       translatedY += theParent.y;
+      translatedRotation += theParent.rotation;
+      translatedScaleX += theParent.scaleX;
+      translatedScaleY += theParent.scaleY;
 
       theParent = theParent._parentDisplayContainer;
     }
 
-    return [translatedX, translatedY];
+    return [translatedX, translatedY, translatedRotation, translatedScaleX, translatedScaleY];
   },
 
   /**
@@ -183,11 +198,18 @@ canvaslib.DisplayContainer.prototype = {
     var newPos;
 
     if(this.positionChanged()) {
-      newPos = this._getCanvasPosition(this.x, this.y);
+      newPos = this._getTranslatedCanvasPositions();
       this._oldX = this.x;
       this._oldY = this.y;
+      this._oldRotation = this.rotation;
+      this._oldScaleX = this.scaleX;
+      this._oldScaleY = this.scaleY;
+
       this._canvasX = newPos[0];
       this._canvasY = newPos[1];
+      this._rotation = newPos[2];
+      this._scaleX = newPos[3];
+      this._scaleY = newPos[4];
     }
   },
 

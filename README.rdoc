@@ -8,10 +8,13 @@ Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
 == Classes
 The canvaslib consists of the following classes:
+* canvaslib.Bitmap: draws external loaded bitmaps
+* canvaslib.Math: holds mathematical functions
 * canvaslib.DisplayContainer: basic graphical object and drawer
 * canvaslib.Shape: graphical object that holds a shape
 * canvaslib.Renderer: class that manages rendering for animations
 * canvaslib.StackedLoader: class that manages downloads for images or audiosamples
+* canvaslib.TextField: draws texts
 * canvaslib.Tween: class that manages animations for all displayobject's
 
 Note that the canvaslib.Tween & canvaslib.StackedLoader classes are static classes.
@@ -130,6 +133,8 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
 == Todo/notes
 * add bitmap support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
 * add more easing modules
+* finalize text_field class
+* add more transformation options to shape and bitmap
 * ...
 
   

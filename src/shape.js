@@ -222,7 +222,7 @@ canvaslib.Shape.prototype = {
       } else {
         context.translate(this._canvasX, this._canvasY);
         context.rotate(canvaslib.Math.angleToRadians(this.rotation));
-        context.scale(this.scaleX, this.scaleY);
+        context.scale(this._scaleX, this._scaleY);
       }
 
       for(i = 0; i < this._drawingCommands.length; i++) {
