@@ -19,7 +19,7 @@ canvaslib.Bitmap.prototype = {
 
       // set pos and rotate
       this._context.translate(this._canvasX, this._canvasY);
-      this._context.rotate(canvaslib.Math.angleToRadians(this.rotation));
+      this._context.rotate(canvaslib.Math.angleToRadians(this._rotation));
       this._context.scale(this._scaleX, this._scaleY);
 
       // draw image
