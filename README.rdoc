@@ -6,6 +6,17 @@ Tested on iPhone. Demo's do not run very smooth but is is a beginning!
 
 Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
+== Demo's
+
+Renderer + scaleX & scaleY demo:
+http://altovista.nl/canvas_lib/samples/renderer.html
+
+Bitmap drawing + Stacked loader demo:
+http://altovista.nl/canvas_lib/samples/loader.html
+
+Tweening demo:
+http://altovista.nl/canvas_lib/samples/tween.html
+
 == Classes
 The canvaslib consists of the following classes:
 * canvaslib.Bitmap: draws external loaded bitmaps
