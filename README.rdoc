@@ -142,7 +142,8 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
 
   
 == Todo/notes
-* add bitmap support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
+* add bitmap caching support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
+* refactor canvaslib.Shape so all drawing-command's are collected/cached for more performance
 * add more easing modules
 * finalize text_field class
 * add more transformation options to shape and bitmap
