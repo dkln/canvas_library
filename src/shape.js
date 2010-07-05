@@ -231,24 +231,10 @@ canvaslib.Shape.prototype = {
     var j = 0;
     var params = [];
     var param;
-    var context = this.bitmapCache && this._madeChanges ? this._backBufferContext : this._context;
 
-    context.save();
+    this._context.save();
 
-    // sets the alpha of the image
-    context.globalAlpha = this.alpha;
-    context.translate(this._canvasX, this._canvasY);
-    //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
-    context.rotate(canvaslib.Math.angleToRadians(this._rotation));
-    context.scale(this._scaleX, this._scaleY);
-
-    // add shadow?
-    if(this.shadow) {
-      context.shadowBlur = this.shadowBlur;
-      context.shadowColor = this.shadowColor;
-      context.shadowOffsetX = this.shadowOffsetX;
-      context.shadowOffsetY = this.shadowOffsetY;
-    }
+    this._setupContext();
 
     // @TODO, @FIXME maybe an "eval" is quicker than executing seperate
     // methods?
@@ -257,23 +243,23 @@ canvaslib.Shape.prototype = {
       // does the drawing command have any params?
       // setter?
       if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
-        context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
+        this._context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
         //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
 
       } else if(this._drawingCommands[i].length > 1) {
         // yes translate them
-        context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
+        this._context[this._drawingCommands[i][0]].apply(this._context, this._drawingCommands[i].slice(1));
         //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
 
       } else {
         // nope!
-        context[this._drawingCommands[i][0]]();
+        this._context[this._drawingCommands[i][0]]();
         //console.log(this._drawingCommands[i][0] + "()");
 
       }
     }
 
-    context.restore();
+    this._context.restore();
     this._madeChanges = false;
   },
 

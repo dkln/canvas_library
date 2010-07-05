@@ -299,5 +299,22 @@ canvaslib.DisplayContainer.prototype = {
       return parent;
 
     }
+  },
+
+  _setupContext: function() {
+    // sets the alpha of the image
+    this._context.globalAlpha = this.alpha;
+    this._context.translate(this._canvasX, this._canvasY);
+    //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
+    this._context.rotate(canvaslib.Math.angleToRadians(this._rotation));
+    this._context.scale(this._scaleX, this._scaleY);
+
+    // add shadow?
+    if(this.shadow) {
+      this._context.shadowBlur = this.shadowBlur;
+      this._context.shadowColor = this.shadowColor;
+      this._context.shadowOffsetX = this.shadowOffsetX;
+      this._context.shadowOffsetY = this.shadowOffsetY;
+    }
   }
 };
