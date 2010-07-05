@@ -17,27 +17,22 @@ canvaslib.DisplayContainer = function(canvasId) {
   this.scaleY = 1;
   this.children = [];
   this.visible = true;
-  this.transformM11 = 1;
-  this.transformM12 = 0;
-  this.transformM21 = 0;
-  this.transformM22 = 1;
-  this.transformDx = 0;
-  this.transformDy = 0;
+  this.shadow = false;
+  this.shadowBlur = 0;
+  this.shadowColor = 0;
+  this.shadowOffsetX = 0;
+  this.shadowOffsetY = 0;
 
-  this._oldTransformM11 = 0;
-  this._oldTransformM12 = 0;
-  this._oldTransformM21 = 0;
-  this._oldTransformM22 = 0;
-  this._oldTransformDx = 0;
-  this._oldTransformDy = 0;
   this._oldX = 0;
   this._oldY = 0;
   this._oldRotation = 0;
   this._oldScaleX = 1;
   this._oldScaleY = 1;
+  this._oldVisible = true;
 
   this._canvasX = 0;
   this._canvasY = 0;
+  this._visible = true;
   this._rotation = 0;
   this._scaleX = 1;
   this._scaleY = 1;
@@ -177,21 +172,20 @@ canvaslib.DisplayContainer.prototype = {
     return (  this.x != this._oldX || this.y != this._oldY ||
               this.rotation != this._oldRotation ||
               this.scaleX != this._oldScaleX || this.scaleY != this._oldScaleY ||
-              this.transformM11 != this._oldTransformM11 || this.transformM12 != this._oldTransformM12 ||
-              this.transformM21 != this._oldTransformM21 || this.transformM22 != this._oldTransformM22 ||
-              this.transformDx != this._oldTransformDx || this.transformDy != this._oldTransformDy );
+              this.visible != this._oldVisible );
   },
 
   /**
    * Translates relative X, Y pos to canvas/world X, Y pos
    */
-  _getTranslatedCanvasPositions: function() {
+  _getInheritedTranslatedVars: function() {
     var translatedX = 0;
     var translatedY = 0;
     var translatedRotation = 0;
     var translatedScaleX = 0;
     var translatedScaleY = 0;
     var theParent = this;
+    var visible = true;
 
     while(theParent != null) {
       translatedX += theParent.x;
@@ -199,37 +193,35 @@ canvaslib.DisplayContainer.prototype = {
       translatedRotation += theParent.rotation;
       translatedScaleX += theParent.scaleX;
       translatedScaleY += theParent.scaleY;
+      if(!theParent.visible) visible = false;
 
       theParent = theParent._parentDisplayContainer;
     }
 
-    return [translatedX, translatedY, translatedRotation, translatedScaleX, translatedScaleY];
+    return [translatedX, translatedY, translatedRotation, translatedScaleX, translatedScaleY, visible];
   },
 
   /**
    * Translated relative X, Y pos to canvas/world X, Y pos
    */
   _setCanvasPosition: function() {
-    var newPos;
+    var newVars;
 
     if(this.positionChanged()) {
-      newPos = this._getTranslatedCanvasPositions();
+      newVars = this._getInheritedTranslatedVars();
+
       this._oldX = this.x;
       this._oldY = this.y;
       this._oldRotation = this.rotation;
       this._oldScaleX = this.scaleX;
       this._oldScaleY = this.scaleY;
-      this._oldTransformM11 = this.transformM11;
-      this._oldTransformM12 = this.transformM12;
-      this._oldTransformM21 = this.transformM21;
-      this._oldTransformM22 = this.transformM22;
-      this._oldTransformDx = this.transformDx;
-      this._oldTransformDy = this.transformDy;
-      this._canvasX = newPos[0];
-      this._canvasY = newPos[1];
-      this._rotation = newPos[2];
-      this._scaleX = newPos[3];
-      this._scaleY = newPos[4];
+
+      this._canvasX = newVars[0];
+      this._canvasY = newVars[1];
+      this._rotation = newVars[2];
+      this._scaleX = newVars[3];
+      this._scaleY = newVars[4];
+      this._visible = newVars[5];
     }
   },
 
@@ -254,7 +246,7 @@ canvaslib.DisplayContainer.prototype = {
       for(i = 0; i < this._allChildren.length; i++) {
         // translate X, Y pos
         this._allChildren[i]._setCanvasPosition();
-        if(this._allChildren[i].visible) this._allChildren[i]._draw();
+        if(this._allChildren[i]._visible) this._allChildren[i]._draw();
       }
 
     } else {

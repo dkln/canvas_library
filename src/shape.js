@@ -237,22 +237,21 @@ canvaslib.Shape.prototype = {
 
     // sets the alpha of the image
     context.globalAlpha = this.alpha;
+    context.translate(this._canvasX, this._canvasY);
+    //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
+    context.rotate(canvaslib.Math.angleToRadians(this._rotation));
+    context.scale(this._scaleX, this._scaleY);
 
-    // set start X and Y pos to the real-world-canvas-XY
-    // do not translate if we are using bitmap caches
-    if(this.bitmapCache) {
-      // clear bitmap cache
-      context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-
-    } else {
-      context.translate(this._canvasX, this._canvasY);
-      //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
-      context.rotate(canvaslib.Math.angleToRadians(this._rotation));
-      context.scale(this._scaleX, this._scaleY);
+    // add shadow?
+    if(this.shadow) {
+      context.shadowBlur = this.shadowBlur;
+      context.shadowColor = this.shadowColor;
+      context.shadowOffsetX = this.shadowOffsetX;
+      context.shadowOffsetY = this.shadowOffsetY;
     }
 
     // @TODO, @FIXME maybe an "eval" is quicker than executing seperate
-    // methods
+    // methods?
     for(i = 0; i < this._drawingCommands.length; i++) {
       // draw the stuff on the canvas
       // does the drawing command have any params?
