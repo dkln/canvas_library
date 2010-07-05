@@ -5,48 +5,60 @@
  */
 
 canvaslib.DisplayContainer = function(canvasId) {
-   this.id = '';
-   this.rotation = 0;
-   this.x = 0;
-   this.y = 0;
-   this.alpha = 1;
-   this.enabled = true;
-   this.width = 0;
-   this.height = 0;
-   this.scaleX = 1;
-   this.scaleY = 1;
-   this.children = [];
-   this.visible = true;
+  this.id = '';
+  this.rotation = 0;
+  this.x = 0;
+  this.y = 0;
+  this.alpha = 1;
+  this.enabled = true;
+  this.width = 0;
+  this.height = 0;
+  this.scaleX = 1;
+  this.scaleY = 1;
+  this.children = [];
+  this.visible = true;
+  this.transformM11 = 1;
+  this.transformM12 = 0;
+  this.transformM21 = 0;
+  this.transformM22 = 1;
+  this.transformDx = 0;
+  this.transformDy = 0;
 
-   this._oldX = 0;
-   this._oldY = 0;
-   this._oldRotation = 0;
-   this._oldScaleX = 1;
-   this._oldScaleY = 1;
+  this._oldTransformM11 = 0;
+  this._oldTransformM12 = 0;
+  this._oldTransformM21 = 0;
+  this._oldTransformM22 = 0;
+  this._oldTransformDx = 0;
+  this._oldTransformDy = 0;
+  this._oldX = 0;
+  this._oldY = 0;
+  this._oldRotation = 0;
+  this._oldScaleX = 1;
+  this._oldScaleY = 1;
 
-   this._canvasX = 0;
-   this._canvasY = 0;
-   this._rotation = 0;
-   this._scaleX = 1;
-   this._scaleY = 1;
-   this._canvas = null;
-   this._backBufferCanvas = null;
-   this._backBufferContext;
-   this._context = null;
-   this._parentDisplayContainer = null;
-   this._superDisplayContainer = null;
-   this._childrenChanged = false;
-   this._allChildren = null;
+  this._canvasX = 0;
+  this._canvasY = 0;
+  this._rotation = 0;
+  this._scaleX = 1;
+  this._scaleY = 1;
+  this._canvas = null;
+  this._backBufferCanvas = null;
+  this._backBufferContext;
+  this._context = null;
+  this._parentDisplayContainer = null;
+  this._superDisplayContainer = null;
+  this._childrenChanged = false;
+  this._allChildren = null;
 
-   if(canvasId) {
-     this._canvas = document.getElementById(canvasId);
-     this._context = this._canvas.getContext('2d');
+  if(canvasId) {
+    this._canvas = document.getElementById(canvasId);
+    this._context = this._canvas.getContext('2d');
 
-     this._backBufferCanvas = document.createElement('canvas');
-     this._backBufferCanvas.width = this._canvas.width;
-     this._backBufferCanvas.height = this._canvas.height;
-     this._backBufferContext = this._backBufferCanvas.getContext('2d');
-   }
+    this._backBufferCanvas = document.createElement('canvas');
+    this._backBufferCanvas.width = this._canvas.width;
+    this._backBufferCanvas.height = this._canvas.height;
+    this._backBufferContext = this._backBufferCanvas.getContext('2d');
+  }
 };
 
 canvaslib.DisplayContainer.prototype = {
@@ -164,7 +176,10 @@ canvaslib.DisplayContainer.prototype = {
   positionChanged: function() {
     return (  this.x != this._oldX || this.y != this._oldY ||
               this.rotation != this._oldRotation ||
-              this.scaleX != this._oldScaleX || this.scaleY != this._oldScaleY );
+              this.scaleX != this._oldScaleX || this.scaleY != this._oldScaleY ||
+              this.transformM11 != this._oldTransformM11 || this.transformM12 != this._oldTransformM12 ||
+              this.transformM21 != this._oldTransformM21 || this.transformM22 != this._oldTransformM22 ||
+              this.transformDx != this._oldTransformDx || this.transformDy != this._oldTransformDy );
   },
 
   /**
@@ -204,7 +219,12 @@ canvaslib.DisplayContainer.prototype = {
       this._oldRotation = this.rotation;
       this._oldScaleX = this.scaleX;
       this._oldScaleY = this.scaleY;
-
+      this._oldTransformM11 = this.transformM11;
+      this._oldTransformM12 = this.transformM12;
+      this._oldTransformM21 = this.transformM21;
+      this._oldTransformM22 = this.transformM22;
+      this._oldTransformDx = this.transformDx;
+      this._oldTransformDy = this.transformDy;
       this._canvasX = newPos[0];
       this._canvasY = newPos[1];
       this._rotation = newPos[2];

@@ -29,7 +29,7 @@ canvaslib.Shape.prototype = {
   },
 
   /**
-   *
+   * Creates a gradient fillstyle with given colorStops
    */
   addColorStops: function(gradient, colorStops) {
     var i = 0;
@@ -112,6 +112,22 @@ canvaslib.Shape.prototype = {
   lineTo: function(x, y) {
     this._madeChanges = true;
     this._drawingCommands.push(['lineTo', x, y]);
+  },
+
+  /**
+   * Draws a bezier curve
+   */
+  bezierCurveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+    this._madeChanges = true;
+    this._drawingCommands.push(['bezierCurveTo', cp1x, cp1y, cp2x, cp2y, x, y]);
+  },
+
+  /**
+   * Draws quadtric curve to
+   */
+  quadraticCurveTo: function(cpx, cpy, x, y) {
+    this._madeChanges = true;
+    this._drawingCommands.push(['quadraticCurveTo', cpx, cpy, x, y]);
   },
 
   /**
@@ -217,65 +233,48 @@ canvaslib.Shape.prototype = {
     var param;
     var context = this.bitmapCache && this._madeChanges ? this._backBufferContext : this._context;
 
-    // did we not make any graphical changes and are we using a bitmap cache?
-    if(!this._madeChanges && this.bitmapCache) {
-      // draw to our backbuffer
-      context.save();
-      //context.globalCompositeOperation = 'destination-atop';
-      context.translate(this._canvasX, this.canvasY);
-      context.scale(this._scaleX, this._scaleY);
-      context.rotate(canvaslib.Math.angleToRadians(this._rotation));
+    context.save();
 
-      // @TODO W3C epic fail... putImageData cannot handle transparency because that would make it usefull
-      //
-      //context.putImageData(this._imageData, 0, 0);
-      //context.drawImage(this._imageData, 0, 0);
-      context.drawImage(this._backBufferCanvas, 0, 0);
-      //context.drawImage(this._imageData, 0, 0);
+    // sets the alpha of the image
+    context.globalAlpha = this.alpha;
+
+    // set start X and Y pos to the real-world-canvas-XY
+    // do not translate if we are using bitmap caches
+    if(this.bitmapCache) {
+      // clear bitmap cache
+      context.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
     } else {
-      context.save();
-
-      // sets the alpha of the image
-      context.globalAlpha = this.alpha;
-
-      // set start X and Y pos to the real-world-canvas-XY
-      // do not translate if we are using bitmap caches
-      if(this.bitmapCache) {
-        // clear bitmap cache
-        context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-
-      } else {
-        context.translate(this._canvasX, this._canvasY);
-        context.rotate(canvaslib.Math.angleToRadians(this._rotation));
-        context.scale(this._scaleX, this._scaleY);
-      }
-
-      for(i = 0; i < this._drawingCommands.length; i++) {
-        // draw the stuff on the canvas
-        // does the drawing command have any params?
-        // setter?
-        if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
-          context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
-          //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
-
-        } else if(this._drawingCommands[i].length > 1) {
-          // yes translate them
-          context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
-          //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
-
-        } else {
-          // nope!
-          context[this._drawingCommands[i][0]]();
-          //console.log(this._drawingCommands[i][0] + "()");
-
-        }
-      }
-
-      context.restore();
-      if(this.bitmapCache && this._madeChanges) this._cacheBitmap();
+      context.translate(this._canvasX, this._canvasY);
+      //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
+      context.rotate(canvaslib.Math.angleToRadians(this._rotation));
+      context.scale(this._scaleX, this._scaleY);
     }
 
+    // @TODO, @FIXME maybe an "eval" is quicker than executing seperate
+    // methods
+    for(i = 0; i < this._drawingCommands.length; i++) {
+      // draw the stuff on the canvas
+      // does the drawing command have any params?
+      // setter?
+      if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
+        context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
+        //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
+
+      } else if(this._drawingCommands[i].length > 1) {
+        // yes translate them
+        context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
+        //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
+
+      } else {
+        // nope!
+        context[this._drawingCommands[i][0]]();
+        //console.log(this._drawingCommands[i][0] + "()");
+
+      }
+    }
+
+    context.restore();
     this._madeChanges = false;
   },
 
