@@ -76,11 +76,34 @@ canvaslib.Shape.prototype = {
    * Moves the cursor to X Y
    */
   moveTo: function(x, y) {
-    this._madeChanges = true;
-
     this._cursorX = x;
     this._cursorY = y;
     this._drawingCommands.push(['moveTo', x, y]);
+  },
+
+  /**
+   * Sets the current line thickness
+   */
+  lineWidth: function(thickness) {
+    this._drawingCommands.push(['lineWidth', thickness]);
+  },
+
+  /**
+   * Sets the line cap style
+   *
+   * Can be butt, round or square
+   */
+  lineCap: function(cap) {
+    this._drawingCommands.push(['lineCap', cap]);
+  },
+
+  /**
+   * Line join style
+   *
+   * Possible values: bevel, round or miter
+   */
+  lineJoin: function(join) {
+    this._drawingCommands.push(['lineJoin', join]);
   },
 
   /**
@@ -88,8 +111,14 @@ canvaslib.Shape.prototype = {
    */
   lineTo: function(x, y) {
     this._madeChanges = true;
-
     this._drawingCommands.push(['lineTo', x, y]);
+  },
+
+  /**
+   * Sets the current miter limit ratio
+   */
+  miterLimit: function(ratio) {
+    this._drawingCommands.push(['miterLimit', ratio]);
   },
 
   /**
@@ -137,7 +166,6 @@ canvaslib.Shape.prototype = {
    * Sets the fillstyle
    */
   fillStyle: function(color) {
-    this._madeChanges = true;
     this._drawingCommands.push(['fillStyle=', color]);
   },
 
@@ -145,7 +173,6 @@ canvaslib.Shape.prototype = {
    * Changes the style of strokes
    */
   strokeStyle: function(color) {
-    this._madeChanges = true;
     this._drawingCommands.push(['strokeStyle=', color]);
   },
 
@@ -153,7 +180,6 @@ canvaslib.Shape.prototype = {
    * Begins drawing a path
    */
   beginPath: function() {
-    this._madeChanges = true;
     this._drawCommands.push(['beginPath']);
   },
 
