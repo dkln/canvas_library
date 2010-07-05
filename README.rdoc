@@ -50,13 +50,13 @@ Javascript:
   mainDisplayObj.addChild(someShape);
 
   var renderer = new canvaslib.Renderer(mainDisplayObj);
-  
+
   // framehandlers will be called every frame update
   renderer.addFrameHandler( function() { someShape.x++ });
-  
+
   // runs the render process for 25fps
   renderer.run(25);
-  
+
 == About DisplayContainer's
 
 A DisplayContainer is an object that can hold other graphical objects. These graphical objects can be nested in eachother. Just like <div>'s in <div>'s.
@@ -67,60 +67,60 @@ Nesting objects:
   var obj = new canvaslib.Shape();
   obj.x = 10;
   obj.y = 10;
-  
+
   var otherObj = new canvaslib.Shape();
   otherObj.x = 0;
   otherObj.y = 0;
-  
+
   obj.addChild(otherObj);
-  
+
   var yetAnotherObj = new canvaslib.Shape();
   yetAnotherObj.x = 0;
   yetAnotherObj.y = 0;
-  
+
   otherObj.addChild(yetAnotherObj);
-  
+
   obj.draw();
-  
+
 == Drawing shapes
 
 The drawing API is almost the same as the Canvas drawing API. If you want to draw paths to the canvas, use the +canvaslib.Shape+ class.
 
 Drawing rectangles:
   var screen = new canvaslib.DisplayContainer("the_screen");
-  
+
   var rect = new canvaslib.Shape();
   rect.x = 0;
   rect.y = 0;
   rect.fillStyle("rgb(255, 0, 0, 1)");
   rect.fillRect(0, 0, 25, 25);
-  
+
   rect.fillStyle("rgb(0, 255, 0, 0.5)");
   rect.fillRect(10, 10, 25, 25);
-  
+
   screen.addChild(rect);
-  
+
   screen.draw();
-  
+
 == Loading and drawing bitmaps
 
 Bitmaps can easily be loaded with the +canavaslib.StackedLoader+ class. The +canvaslib.StackedLoader+ manages all your assets so you can preload images or audio assets before rendering all your stuff.
   var screen = new canvaslib.DisplayContainer("the_screen");
   var bitmap;
-  
+
   canvaslib.StackedLoader.load("image_id", "image", "logo.png");
   canvaslib.StackedLoader.load("another_image", "image", "foo.png");
   canvaslib.StackedLoader.load("and_another_one", "image", "bar.png");
-  
+
   canvaslib.StackedLoader.start(onLoadComplete);
-  
+
   function onLoadComplete() {
     bitmap = canvaslib.StackedLoader.get("image_id");
-    
+
     screen.addChild(bitmap);
     screen.draw();
   }
-  
+
 The +load+ function adds an asset to the loadstack. The +start+ function triggers the StackedLoader to load all assets that are placed in the load stack.
 
 == Animating objects
@@ -128,31 +128,26 @@ The +load+ function adds an asset to the loadstack. The +start+ function trigger
 You can use the +canvaslib.Tween+ class to tween objects between two points.
 
   ...
-  var renderer = new canvaslib.Renderer(mainDisplayObj);            
+  var renderer = new canvaslib.Renderer(mainDisplayObj);
   renderer.run(25);
-  
+
   ...
   canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 });
-  
+
 The above example will tween the +x+ & +y+ property of object +someShape+ to coordinate 100 in 5 secs.
 
 Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.Renderer+ or call the +canavslib.Tween+ +update+ method yourself:
 
   canavaslib.Tween.update();
 
-  
+
 == Todo/notes
-* add bitmap caching support to shapes (like cacheAsBitmap in Flash) to increase performance (http://dev.w3.org/html5/2dcontext/#pixel-manipulation)
 * refactor canvaslib.Shape so all drawing-command's are collected/cached for more performance
 * add more easing modules
 * finalize text_field class
-* add more transformation options to shape and bitmap
-* shadows
-* lineWidth / lineCap etc.
 * focus management
 * globalCompositeOperation etc.
 
-  
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
 
