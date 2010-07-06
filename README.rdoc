@@ -6,6 +6,15 @@ Tested on iPhone. Demo's do not run very smooth but is is a beginning!
 
 Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
+== Todo/notes
+* inherited alpha blend
+* investigate the possibility to stack all the drawing commands in one big eval (is it faster than several context[function]'s ?)
+* investigate use of HTML 5 workers (maybe renderer/tweening can run in another worker?)
+* add more easing modules
+* finalize text_field class / external fonts?
+* focus management
+* globalCompositeOperation
+
 == Demo's
 
 Renderer + scaleX & scaleY demo:
@@ -140,13 +149,6 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
 
   canavaslib.Tween.update();
 
-
-== Todo/notes
-* refactor canvaslib.Shape so all drawing-command's are collected/cached for more performance
-* add more easing modules
-* finalize text_field class
-* focus management
-* globalCompositeOperation etc.
 
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
