@@ -8,28 +8,28 @@ canvaslib.TextField = function() {
   this.text = '';
   this.textAlign = 'left';
   this.strokeStyle = '';
-  this.fillStyle = 'black';
+  this.fillStyle = 'rgba(0,0,0,1)';
   this.font = '20pt Arial';
   this.maxWidth = null;
 };
 
 canvaslib.TextField.prototype = {
   _draw: function() {
-    context.save();
-    context.translate(this._canvasX, this._canvasY);
-    context.rotation(canvaslib.Math.angleToRadians(this.rotation));
+    this._context.save();
+    this._setupContext();
+
+    this._context.font = this.font;
 
     if(this.strokeStyle != '')
-      context.strokeStyle = this.strokeStyle;
+      this._context.strokeStyle = this.strokeStyle;
 
     if(this.fillStyle != '')
-      context.fillStyle = this.fillStyle;
+      this._context.fillStyle = this.fillStyle;
 
-    context.fillText(this.text, 0, 0, this.maxWidth);
-    context.stroke();
+    this._context.fillText(this.text, 0, 0);//, this.maxWidth);
 
-    context.restore();
+    this._context.restore();
   }
 };
 
-canvaslib.Utils.addOwnProperties(canvaslib.DisplayContainer.prototype, canvaslib.TextField);
+canvaslib.Utils.addOwnProperties(canvaslib.DisplayContainer.prototype, canvaslib.TextField.prototype);
