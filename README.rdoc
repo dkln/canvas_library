@@ -2,7 +2,7 @@
 
 Handy for those who're used to the nature of Flash / Actionscript 3.0 (with all the nice nested DisplayContainers) but you just want to use Javascript because it's cool and open. 
 
-Tested on iPhone. Demo's do not run very smooth but is is a beginning!
+Tested on iPhone. Demo's do not run very smooth but it is a beginning!
 
 Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
