@@ -7,6 +7,8 @@ Tested on iPhone. Demo's do not run very smooth but is is a beginning!
 Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
 == Todo/notes
+* add mouse management to canvaslib.DisplayObject
+* investigate HTML 5 mobile mouse events (swipe, rotate etc.)
 * inherited alpha blend
 * investigate the possibility to stack all the drawing commands in one big eval (is it faster than several context[function]'s ?)
 * investigate use of HTML 5 workers (maybe renderer/tweening can run in another worker?)
