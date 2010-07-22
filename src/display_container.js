@@ -253,16 +253,19 @@ canvaslib.DisplayContainer.prototype = {
           // draw on surface
           // setup context
           this._context.save();
+          this._context.beginPath();
           this._setupContext(this._context, this._allChildren[i]);
 
           // go draw!
           this._allChildren[i]._draw(this._context);
+          this._detectMouseInPath(this._context, this._allChildren[i]);
+          this._context.closePath();
 
           // restore it
           this._context.restore();
 
           // draw on backbuffer for collision detection
-          this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
+          /**this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
           this._backBufferContext.save();
           this._setupContext(this._backBufferContext, this._allChildren[i]);
           this._backBufferContext.beginPath();
@@ -270,7 +273,7 @@ canvaslib.DisplayContainer.prototype = {
 
           // detect mouse
           this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
-          this._backBufferContext.restore();
+          this._backBufferContext.restore();**/
         }
       }
 
@@ -330,11 +333,9 @@ canvaslib.DisplayContainer.prototype = {
    * Sets the mouse hit detection flag
    */
   _detectMouseInPath: function(context, displayObj) {
-    //console.log(this.superDisplayContainer()._mouseX + ", " + this.superDisplayContainer()._mouseY);
-    if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
+    if(!displayObj._mouseHit && context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
       displayObj._mouseHit = true;
       alert('score!');
-      console.log('mouse in path');
     } else {
       displayObj._mouseHit = false;
     }
@@ -364,7 +365,6 @@ canvaslib.DisplayContainer.prototype = {
     // sets the alpha of the image
     context.globalAlpha = displayObj.alpha;
     context.translate(displayObj._canvasX, displayObj._canvasY);
-    //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
     context.rotate(canvaslib.Math.angleToRadians(displayObj._rotation));
     context.scale(displayObj._scaleX, displayObj._scaleY);
 

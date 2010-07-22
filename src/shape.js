@@ -193,21 +193,6 @@ canvaslib.Shape.prototype = {
   },
 
   /**
-   * Begins drawing a path
-   */
-  beginPath: function() {
-    this._drawCommands.push(['beginPath']);
-  },
-
-  /**
-   * Closes a path
-   */
-  closePath: function() {
-    this._madeChanges = true;
-    this._drawCommands.push(['closePath']);
-  },
-
-  /**
    * Sets the global alpha
    */
   globalAlpha: function(alpha) {
@@ -245,13 +230,10 @@ canvaslib.Shape.prototype = {
       } else if(this._drawingCommands[i].length > 1) {
         // yes translate them
         context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
-        //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
 
       } else {
         // nope!
         context[this._drawingCommands[i][0]]();
-        //console.log(this._drawingCommands[i][0] + "()");
-
       }
     }
 
