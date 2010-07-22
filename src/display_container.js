@@ -30,6 +30,8 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._oldScaleY = 1;
   this._oldVisible = true;
 
+  this._mouseX = 0;
+  this._mouseY = 0;
   this._canvasX = 0;
   this._canvasY = 0;
   this._visible = true;
@@ -37,6 +39,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._scaleX = 1;
   this._scaleY = 1;
   this._canvas = null;
+  this._mouseHit = false;
   this._backBufferCanvas = null;
   this._backBufferContext;
   this._context = null;
@@ -246,7 +249,29 @@ canvaslib.DisplayContainer.prototype = {
       for(i = 0; i < this._allChildren.length; i++) {
         // translate X, Y pos
         this._allChildren[i]._setCanvasPosition();
-        if(this._allChildren[i]._visible) this._allChildren[i]._draw();
+        if(this._allChildren[i]._visible) {
+          // draw on surface
+          // setup context
+          this._context.save();
+          this._setupContext(this._context, this._allChildren[i]);
+
+          // go draw!
+          this._allChildren[i]._draw(this._context);
+
+          // restore it
+          this._context.restore();
+
+          // draw on backbuffer for collision detection
+          this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
+          this._backBufferContext.save();
+          this._setupContext(this._backBufferContext, this._allChildren[i]);
+          this._backBufferContext.beginPath();
+          this._allChildren[i]._draw(this._backBufferContext);
+
+          // detect mouse
+          this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
+          this._backBufferContext.restore();
+        }
       }
 
     } else {
@@ -286,7 +311,7 @@ canvaslib.DisplayContainer.prototype = {
     }
   },
 
-  _draw: function() {
+  _draw: function(context) {
     // you could implement this...
   },
 
@@ -301,20 +326,54 @@ canvaslib.DisplayContainer.prototype = {
     }
   },
 
-  _setupContext: function() {
+  /**
+   * Sets the mouse hit detection flag
+   */
+  _detectMouseInPath: function(context, displayObj) {
+    //console.log(this.superDisplayContainer()._mouseX + ", " + this.superDisplayContainer()._mouseY);
+    if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
+      displayObj._mouseHit = true;
+      alert('score!');
+      console.log('mouse in path');
+    } else {
+      displayObj._mouseHit = false;
+    }
+  },
+
+  /**
+   * Set's up global mouse event listener
+   */
+  _setupMouse: function() {
+      var self = this;
+
+      this._canvas.mouseover = true;
+      this._canvas.addEventListener('mousemove', function(event) {
+        self.superDisplayContainer()._mouseX = event.clientX - self._canvas.offsetLeft;
+        self.superDisplayContainer()._mouseY = event.clientY - self._canvas.offsetTop;
+      }, false);
+  },
+
+  /**
+   * Sets up context for drawing
+   */
+  _setupContext: function(context, displayObj) {
+    // sets mouse over events if not present yet
+    if(!this._canvas.mouseover)
+      this._setupMouse();
+
     // sets the alpha of the image
-    this._context.globalAlpha = this.alpha;
-    this._context.translate(this._canvasX, this._canvasY);
+    context.globalAlpha = displayObj.alpha;
+    context.translate(displayObj._canvasX, displayObj._canvasY);
     //context.setTransform(this.transformM11, this.transformM12, this.transformM21, this.transformM22, this.transformDx, this.transformDy);
-    this._context.rotate(canvaslib.Math.angleToRadians(this._rotation));
-    this._context.scale(this._scaleX, this._scaleY);
+    context.rotate(canvaslib.Math.angleToRadians(displayObj._rotation));
+    context.scale(displayObj._scaleX, displayObj._scaleY);
 
     // add shadow?
-    if(this.shadow) {
-      this._context.shadowBlur = this.shadowBlur;
-      this._context.shadowColor = this.shadowColor;
-      this._context.shadowOffsetX = this.shadowOffsetX;
-      this._context.shadowOffsetY = this.shadowOffsetY;
+    if(displayObj.shadow) {
+      context.shadowBlur = displayObj.shadowBlur;
+      context.shadowColor = displayObj.shadowColor;
+      context.shadowOffsetX = displayObj.shadowOffsetX;
+      context.shadowOffsetY = displayObj.shadowOffsetY;
     }
   }
 };

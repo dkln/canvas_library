@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>Canvas Lib test</title>    
+    <script type="text/javascript" src="../src/canvas_lib.js"></script>
+    <script type="text/javascript" src="../src/utils.js"></script>
+    <script type="text/javascript" src="../src/display_container.js"></script>
+    <script type="text/javascript" src="../src/shape.js"></script>
+    <script type="text/javascript" src="../src/renderer.js"></script>
+    <script type="text/javascript" src="../src/tween.js"></script>
+    <script type="text/javascript" src="../src/math.js"></script>
+  </head>
+  <body>
+    <canvas id="test_canvas" width="320" height="240"></canvas>
+    <script type="text/javascript">
+      var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
+      mainDisplayObj.id = "main";
+
+      var someShape = new canvaslib.Shape();
+      someShape.id = "someShape";
+      someShape.x = 10;
+      someShape.y = 10;
+
+      someShape.fillStyle("rgba(0, 0, 0, 1)");
+      someShape.fillRect(0, 0, 50, 50);
+
+      someShape.fillStyle("rgba(255, 0, 0, 0.5)");
+      someShape.fillRect(25, 25, 50, 50);
+
+      mainDisplayObj.addChild(someShape);
+
+      var renderer = new canvaslib.Renderer(mainDisplayObj);
+
+      var side = true;
+
+      renderer.addFrameHandler( function() {
+        if(side) {
+          someShape.x += .5;
+          someShape.y += .5;
+          someShape.scaleX += .01;
+          someShape.scaleY += .01;
+
+          if(someShape.x >= 320 || someShape.y >= 240) side = false;
+
+        } else {
+          someShape.x -= .5;
+          someShape.y -= .5;
+          someShape.scaleX -= .01;
+          someShape.scaleY -= .01;
+
+          if(someShape.x < 0 || someShape.y < 0) side = true;
+        }
+        someShape.rotation++;
+
+        if(someShape.rotation > 360) someShape.rotation = 0;
+      });
+
+      renderer.run(25);
+
+    </script>
+  </body>
+</html>

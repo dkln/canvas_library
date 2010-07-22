@@ -13,18 +13,10 @@ canvaslib.Bitmap.prototype = {
   /**
    * Draws the image to the canvas
    */
-  _draw: function() {
+  _draw: function(context) {
     if(this.imageData) {
-      this._context.save();
-
-      // set pos and rotate
-      this._setupContext();
-
       // draw image
-      this._context.drawImage(this.imageData, 0, 0);
-
-      // restore context
-      this._context.restore();
+      context.drawImage(this.imageData, 0, 0);
     }
   }
 };

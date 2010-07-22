@@ -14,21 +14,16 @@ canvaslib.TextField = function() {
 };
 
 canvaslib.TextField.prototype = {
-  _draw: function() {
-    this._context.save();
-    this._setupContext();
-
-    this._context.font = this.font;
+  _draw: function(context) {
+    context.font = this.font;
 
     if(this.strokeStyle != '')
-      this._context.strokeStyle = this.strokeStyle;
+      context.strokeStyle = this.strokeStyle;
 
     if(this.fillStyle != '')
-      this._context.fillStyle = this.fillStyle;
+      context.fillStyle = this.fillStyle;
 
-    this._context.fillText(this.text, 0, 0);//, this.maxWidth);
-
-    this._context.restore();
+    context.fillText(this.text, 0, 0);//, this.maxWidth);
   }
 };
 

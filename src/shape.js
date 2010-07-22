@@ -226,15 +226,11 @@ canvaslib.Shape.prototype = {
   /**
    * Draws every command to the context of the canvas
    */
-  _draw: function() {
+  _draw: function(context) {
     var i = 0;
     var j = 0;
     var params = [];
     var param;
-
-    this._context.save();
-
-    this._setupContext();
 
     // @TODO, @FIXME maybe an "eval" is quicker than executing seperate
     // methods?
@@ -243,23 +239,22 @@ canvaslib.Shape.prototype = {
       // does the drawing command have any params?
       // setter?
       if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
-        this._context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
+        context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
         //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
 
       } else if(this._drawingCommands[i].length > 1) {
         // yes translate them
-        this._context[this._drawingCommands[i][0]].apply(this._context, this._drawingCommands[i].slice(1));
+        context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
         //console.log(this._drawingCommands[i][0] + "(" + this._drawingCommands[i].slice(1) + ")");
 
       } else {
         // nope!
-        this._context[this._drawingCommands[i][0]]();
+        context[this._drawingCommands[i][0]]();
         //console.log(this._drawingCommands[i][0] + "()");
 
       }
     }
 
-    this._context.restore();
     this._madeChanges = false;
   },
 
