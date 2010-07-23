@@ -275,6 +275,7 @@ canvaslib.DisplayContainer.prototype = {
    */
   _handleMouseEventsAllChildren: function() {
     var i = 0;
+    var eventCalled = false;
 
     if(this.isSuperDisplayContainer()) {
       // loop all children
@@ -288,9 +289,14 @@ canvaslib.DisplayContainer.prototype = {
           this._allChildren[i]._draw(this._backBufferContext, true);
 
           // detect mouse
-          this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
-
+          eventCalled = this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
           this._backBufferContext.restore();
+
+          // this is to prevent calling mouse events for non-visible obj's
+          if(eventCalled) {
+            return;
+          }
+
         }
       }
 
@@ -353,14 +359,24 @@ canvaslib.DisplayContainer.prototype = {
     if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
       if(!displayObj._underCursor) {
         displayObj._underCursor = true;
-        if(displayObj.mouseOver) displayObj.mouseOver();
+
+        if(displayObj.mouseOver) {
+          displayObj.mouseOver();
+          return true;
+        }
       }
     } else {
       if(displayObj._underCursor) {
         displayObj._underCursor = false;
-        if(displayObj.mouseOut) displayObj.mouseOut();
+
+        if(displayObj.mouseOut) {
+          displayObj.mouseOut();
+          return true;
+        }
       }
     }
+
+    return false;
   },
 
   /**
