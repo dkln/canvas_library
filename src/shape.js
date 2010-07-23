@@ -137,6 +137,14 @@ canvaslib.Shape.prototype = {
     this._drawingCommands.push([true, 'miterLimit', ratio]);
   },
 
+  beginPath: function() {
+    this._drawingCommands.push([false, 'beginPath']);
+  },
+
+  closePath: function() {
+    this._drawingCommands.push([false, 'closePath']);
+  },
+
   /**
    * Draws a filled rectangle
    */
@@ -154,7 +162,7 @@ canvaslib.Shape.prototype = {
    * Draws a circle
    */
   circle: function(x, y, radius) {
-    this.arc(x, y, 0, Math.PI * 2, true);
+    this.arc(x, y, radius / 2, 0, Math.PI * 2, true);
   },
 
   /**
@@ -203,7 +211,7 @@ canvaslib.Shape.prototype = {
    */
   globalAlpha: function(alpha) {
     this._madeChanges = true;
-    this._drawCommands.push([false, 'globalAlpha=', alpha]);
+    this._drawingCommands.push([false, 'globalAlpha=', alpha]);
   },
 
   /**
@@ -211,7 +219,7 @@ canvaslib.Shape.prototype = {
    */
   fill: function() {
     this._madeChanges = true;
-    this._drawCommands.push([false, 'fill']);
+    this._drawingCommands.push([false, 'fill']);
   },
 
   /**
@@ -238,7 +246,7 @@ canvaslib.Shape.prototype = {
           // yes translate them
           context[this._drawingCommands[i][1]].apply(context, this._drawingCommands[i].slice(2));
 
-        } else {
+        } else if(this._drawingCommands[i].length == 2) {
           // nope!
           context[this._drawingCommands[i][1]]();
         }

@@ -38,6 +38,17 @@
       otherShape.fillStyle("rgba(255, 0, 0, .5)");
       otherShape.fillRect(0, 0, 25, 25);
 
+      var movingShape = new canvaslib.Shape();
+      movingShape.id = "shape3";
+      movingShape.beginPath();
+      movingShape.fillStyle("rgba(255, 0, 0, 1)");
+      movingShape.x = 10;
+      movingShape.y = 10;
+      movingShape.circle(0, 0, 10);
+      movingShape.closePath();
+      movingShape.fill();
+      movingShape.mouseEnabled = false;
+
       otherShape.onMouseOver = function() {
         canvaslib.Tween.to(otherShape, 500, { scaleX: 1.5, scaleY: 1.5 });
       };
@@ -48,6 +59,11 @@
 
       mainDisplayObj.addChild(someShape);
       mainDisplayObj.addChild(otherShape);
+      mainDisplayObj.addChild(movingShape);
+
+      mainDisplayObj.onMouseMove = function() {
+        canvaslib.Tween.to(movingShape, 500, { x: mainDisplayObj.localX, y: mainDisplayObj.localY });
+      };
 
       var renderer = new canvaslib.Renderer(mainDisplayObj);
       renderer.run(25);

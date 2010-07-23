@@ -25,6 +25,10 @@ canvaslib.DisplayContainer = function(canvasId) {
   this.shadowOffsetY = 0;
   this.onMouseOver = null;
   this.onMouseOut = null;
+  this.onMouseDown = null;
+  this.onMouseMove = null;
+  this.localX = 0;
+  this.localY = 0;
 
   this._oldX = 0;
   this._oldY = 0;
@@ -35,6 +39,8 @@ canvaslib.DisplayContainer = function(canvasId) {
 
   this._mouseX = 0;
   this._mouseY = 0;
+  this._oldMouseX = 0;
+  this._oldMouseY = 0;
   this._canvasX = 0;
   this._canvasY = 0;
   this._visible = true;
@@ -296,8 +302,12 @@ canvaslib.DisplayContainer.prototype = {
 
           obj._draw(this._backBufferContext, true);
 
+          // set local mouse X and Y
+          obj.localX = this._mouseX - this._canvasX;
+          obj.localY = this._mouseY - this._canvasY;
+
           // did the mouse hit an object?
-          if(this._backBufferContext.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
+          if(this._backBufferContext.isPointInPath(this._mouseX, this._mouseY)) {
             this._backBufferContext.restore();
             // yes we did, yer!
             objectUnderCursor = obj;
@@ -309,17 +319,21 @@ canvaslib.DisplayContainer.prototype = {
       }
 
       // is the current object than the lost object that hit the mouse?
-      if(this.superDisplayContainer()._lastObjectUnderCursor != objectUnderCursor) {
+      if(this._lastObjectUnderCursor != objectUnderCursor) {
         // call mouseout event
-        if(this.superDisplayContainer()._lastObjectUnderCursor && this.superDisplayContainer()._lastObjectUnderCursor.onMouseOut)
-          this.superDisplayContainer()._lastObjectUnderCursor.onMouseOut();
+        if(this._lastObjectUnderCursor && this._lastObjectUnderCursor.onMouseOut)
+          this._lastObjectUnderCursor.onMouseOut();
 
         if(objectUnderCursor && objectUnderCursor.onMouseOver)
           objectUnderCursor.onMouseOver();
+
+      // do we have to fire an mouse move event?
+      } else if(objectUnderCursor && (this._oldMouseX != this._mouseX || this._oldMouseY != this._mouseY) && objectUnderCursor.onMouseMove) {
+        objectUnderCursor.onMouseMove();
       }
 
       // remember last object
-      this.superDisplayContainer()._lastObjectUnderCursor = objectUnderCursor;
+      this._lastObjectUnderCursor = objectUnderCursor;
 
     } else {
       this.superDisplayContainer()._handleMouseEventsAllChildren();
@@ -382,8 +396,17 @@ canvaslib.DisplayContainer.prototype = {
 
       this._canvas.mouseover = true;
       this._canvas.addEventListener('mousemove', function(event) {
-        self.superDisplayContainer()._mouseX = event.clientX - self._canvas.offsetLeft;
-        self.superDisplayContainer()._mouseY = event.clientY - self._canvas.offsetTop;
+        var super = self.superDisplayContainer();
+
+        super._oldMouseX = super._oldMouseX;
+        super._oldMouseX = super._oldMouseY;
+        super._mouseX = event.clientX - self._canvas.offsetLeft;
+        super._mouseY = event.clientY - self._canvas.offsetTop;
+        super.localX = super._mouseX;
+        super.localY = super._mouseY;
+
+        if(super.onMouseMove) super.onMouseMove();
+
       }, false);
   },
 
