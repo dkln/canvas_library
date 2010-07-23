@@ -217,7 +217,7 @@ canvaslib.Shape.prototype = {
   /**
    * Draws every command to the context of the canvas
    */
-  _draw: function(context) {
+  _draw: function(context, drawHitarea) {
     var i = 0;
     var j = 0;
     var params = [];

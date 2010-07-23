@@ -1,4 +1,5 @@
 /**
+ *
  * Bitmap
  *
  * @author D Lawson <webmaster@altovista.nl>
@@ -13,10 +14,14 @@ canvaslib.Bitmap.prototype = {
   /**
    * Draws the image to the canvas
    */
-  _draw: function(context) {
+  _draw: function(context, drawHitarea) {
     if(this.imageData) {
-      // draw image
-      context.drawImage(this.imageData, 0, 0);
+      // draw hit area
+      if(drawHitarea) {
+        context.rect(0, 0, this.imageData.width, this.imageData.height);
+      } else {
+        context.drawImage(this.imageData, 0, 0);
+      }
     }
   }
 };

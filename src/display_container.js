@@ -266,7 +266,7 @@ canvaslib.DisplayContainer.prototype = {
           this._backBufferContext.save();
           this._setupContext(this._backBufferContext, this._allChildren[i]);
           this._backBufferContext.beginPath();
-          this._allChildren[i]._draw(this._backBufferContext);
+          this._allChildren[i]._draw(this._backBufferContext, true);
 
           // detect mouse
           this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
@@ -312,7 +312,7 @@ canvaslib.DisplayContainer.prototype = {
     }
   },
 
-  _draw: function(context) {
+  _draw: function(context, drawHitarea) {
     // you could implement this...
   },
 
@@ -332,9 +332,15 @@ canvaslib.DisplayContainer.prototype = {
    */
   _detectMouseInPath: function(context, displayObj) {
     if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
-      displayObj._mouseHit = true;
+      if(!displayObj._mouseHit) {
+        displayObj._mouseHit = true;
+        if(displayObj.mouseOver) displayObj.mouseOver();
+      }
     } else {
-      displayObj._mouseHit = false;
+      if(displayObj._mouseHit) {
+        displayObj._mouseHit = false;
+        if(displayObj.mouseOut) displayObj.mouseOut();
+      }
     }
   },
 

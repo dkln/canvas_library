@@ -14,7 +14,7 @@ canvaslib.TextField = function() {
 };
 
 canvaslib.TextField.prototype = {
-  _draw: function(context) {
+  _draw: function(context, drawHitarea) {
     context.font = this.font;
 
     if(this.strokeStyle != '')

@@ -13,49 +13,40 @@
     <canvas id="test_canvas" width="320" height="240"></canvas>
     <script type="text/javascript">
       var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
-      mainDisplayObj.id = "main";
 
       var someShape = new canvaslib.Shape();
-      someShape.id = "someShape";
-      someShape.x = 10;
-      someShape.y = 10;
+      someShape.id = "shape1";
+      someShape.x = 0;
+      someShape.y = 0;
 
       someShape.fillStyle("rgba(0, 0, 0, 1)");
       someShape.fillRect(0, 0, 50, 50);
 
-      someShape.fillStyle("rgba(255, 0, 0, 0.5)");
-      someShape.fillRect(25, 25, 50, 50);
+      someShape.mouseOver = function() {
+        someShape.alpha = .5;
+      };
+
+      someShape.mouseOut = function() {
+        someShape.alpha = 1;
+      };
+
+      var otherShape = new canvaslib.Shape();
+      otherShape.id = "shape2";
+      otherShape.alpha = .5;
+      otherShape.fillStyle("rgba(255, 0, 0, .5)");
+      otherShape.fillRect(0, 0, 25, 25);
+      otherShape.scaleX = .1;
+      otherShape.scaleY = .1;
 
       mainDisplayObj.addChild(someShape);
+      mainDisplayObj.addChild(otherShape);
 
       var renderer = new canvaslib.Renderer(mainDisplayObj);
-
-      var side = true;
-
-      renderer.addFrameHandler( function() {
-        if(side) {
-          someShape.x += .5;
-          someShape.y += .5;
-          someShape.scaleX += .01;
-          someShape.scaleY += .01;
-
-          if(someShape.x >= 320 || someShape.y >= 240) side = false;
-
-        } else {
-          someShape.x -= .5;
-          someShape.y -= .5;
-          someShape.scaleX -= .01;
-          someShape.scaleY -= .01;
-
-          if(someShape.x < 0 || someShape.y < 0) side = true;
-        }
-        someShape.rotation++;
-
-        if(someShape.rotation > 360) someShape.rotation = 0;
-      });
-
       renderer.run(25);
 
+      canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 })
+      canvaslib.Tween.to(otherShape, 20000, { rotation: 180, x: 320, y: 200, alpha: 1, scaleX: 1, scaleY: 1 });
     </script>
   </body>
 </html>
+
