@@ -271,11 +271,6 @@ canvaslib.DisplayContainer.prototype = {
           // detect mouse
           this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
 
-          if(this._allChildren[i]._mouseHit) {
-            this._context.fillStyle = 'rgba(255, 0, 0, .75)';
-            this._context.fillRect(this._mouseX, this._mouseY, 10, 10);
-          }
-
           this._backBufferContext.restore();
         }
       }
