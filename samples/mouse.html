@@ -57,9 +57,9 @@
         canvaslib.Tween.to(otherShape, 500, { scaleX: 1, scaleY: 1 });
       };
 
-      mainDisplayObj.addChild(someShape);
-      mainDisplayObj.addChild(otherShape);
       mainDisplayObj.addChild(movingShape);
+      mainDisplayObj.addChild(otherShape);
+      mainDisplayObj.addChild(someShape);
 
       mainDisplayObj.onMouseMove = function() {
         canvaslib.Tween.to(movingShape, 500, { x: mainDisplayObj.localX, y: mainDisplayObj.localY });

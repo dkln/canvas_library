@@ -36,7 +36,7 @@
       var renderer = new canvaslib.Renderer(mainDisplayObj);
       renderer.run(25);
 
-      canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 })
+      canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 }, { ease: canvaslib.ElasticOut })
       canvaslib.Tween.to(otherShape, 20000, { rotation: 180, x: 320, y: 200, alpha: 1, scaleX: 1, scaleY: 1 });
     </script>
   </body>
