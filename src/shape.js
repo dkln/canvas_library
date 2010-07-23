@@ -144,6 +144,9 @@ canvaslib.Shape.prototype = {
     this._madeChanges = true;
 
     if(color) this.fillStyle(color);
+
+    // also add rect drawing command to add collision detection
+    this._drawingCommands.push(['rect', x, y, width, height]);
     this._drawingCommands.push(['fillRect', x, y, width, height]);
   },
 
@@ -167,6 +170,9 @@ canvaslib.Shape.prototype = {
    */
   strokeRect: function(x, y, width, height, color) {
     this._madeChanges = true;
+
+    // also add rect drawing command to add collision detection
+    this._drawingCommands.push(['rect', x, y, width, height]);
     this._drawingCommands.push(['strokeRect', x, y, width, height]);
   },
 

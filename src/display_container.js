@@ -253,27 +253,29 @@ canvaslib.DisplayContainer.prototype = {
           // draw on surface
           // setup context
           this._context.save();
-          this._context.beginPath();
           this._setupContext(this._context, this._allChildren[i]);
 
           // go draw!
           this._allChildren[i]._draw(this._context);
-          this._detectMouseInPath(this._context, this._allChildren[i]);
-          this._context.closePath();
 
           // restore it
           this._context.restore();
 
           // draw on backbuffer for collision detection
-          /**this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
+          this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
           this._backBufferContext.save();
           this._setupContext(this._backBufferContext, this._allChildren[i]);
-          this._backBufferContext.beginPath();
           this._allChildren[i]._draw(this._backBufferContext);
 
           // detect mouse
           this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
-          this._backBufferContext.restore();**/
+
+          if(this._allChildren[i]._mouseHit) {
+            this._context.fillStyle = 'rgba(255, 0, 0, .75)';
+            this._context.fillRect(this._mouseX, this._mouseY, 10, 10);
+          }
+
+          this._backBufferContext.restore();
         }
       }
 
@@ -333,9 +335,8 @@ canvaslib.DisplayContainer.prototype = {
    * Sets the mouse hit detection flag
    */
   _detectMouseInPath: function(context, displayObj) {
-    if(!displayObj._mouseHit && context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
+    if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
       displayObj._mouseHit = true;
-      alert('score!');
     } else {
       displayObj._mouseHit = false;
     }
