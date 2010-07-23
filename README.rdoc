@@ -31,6 +31,9 @@ http://altovista.nl/canvas_lib/samples/tween.html
 Text demo:
 http://altovista.nl/canvas_lib/samples/text.html
 
+Mouse + tween demo:
+http://altovista.nl/canvas_lib/samples/mouse.html
+
 == Classes
 The canvaslib consists of the following classes:
 * canvaslib.Bitmap: draws external loaded bitmaps

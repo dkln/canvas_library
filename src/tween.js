@@ -36,8 +36,7 @@ canvaslib.Tween = {
       if(this._tweens[i].obj == obj) {
         this._tweens[i] = null;
         this._tweens.splice(i, 1);
-        this.kill(obj);
-        return;
+        i = -1;
       }
     }
   },
