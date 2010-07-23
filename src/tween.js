@@ -30,7 +30,16 @@ canvaslib.Tween = {
   },
 
   kill: function(obj) {
+    var i = 0;
 
+    for(i = 0; i < this._tweens.length; i++) {
+      if(this._tweens[i].obj == obj) {
+        this._tweens[i] = null;
+        this._tweens.splice(i, 1);
+        this.kill(obj);
+        return;
+      }
+    }
   },
 
   /**

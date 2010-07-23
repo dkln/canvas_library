@@ -154,6 +154,20 @@ Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.
 
   canavaslib.Tween.update();
 
+== Mouse interaction
+
+You have a couple of mouse events to your disposal:
+* onMouseOver
+* onMouseOut
+
+Example of tween and mouse interaction:
+  shape.onMouseOver = function() {
+    canvaslib.Tween.to(shape, 500, { alpha: .5 });
+  };
+
+  shape.onMouseOut = function() {
+    canvaslib.Tween.to(shape, 500, { alpha: 1 });
+  };
 
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
