@@ -22,11 +22,11 @@
       someShape.fillStyle("rgba(0, 0, 0, 1)");
       someShape.fillRect(0, 0, 50, 50);
 
-      someShape.mouseOver = function() {
+      someShape.onMouseOver = function() {
         someShape.alpha = .5;
       };
 
-      someShape.mouseOut = function() {
+      someShape.onMouseOut = function() {
         someShape.alpha = 1;
       };
 
@@ -36,12 +36,12 @@
       otherShape.fillStyle("rgba(255, 0, 0, .5)");
       otherShape.fillRect(0, 0, 25, 25);
 
-      otherShape.mouseOver = function() {
+      otherShape.onMouseOver = function() {
         otherShape.scaleX = 1.5;
         otherShape.scaleY = 1.5;
       };
 
-      otherShape.mouseOut = function() {
+      otherShape.onMouseOut = function() {
         otherShape.scaleX = 1;
         otherShape.scaleY = 1;
       };

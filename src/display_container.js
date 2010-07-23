@@ -17,11 +17,14 @@ canvaslib.DisplayContainer = function(canvasId) {
   this.scaleY = 1;
   this.children = [];
   this.visible = true;
+  this.mouseEnabled = true;
   this.shadow = false;
   this.shadowBlur = 0;
   this.shadowColor = 0;
   this.shadowOffsetX = 0;
   this.shadowOffsetY = 0;
+  this.onMouseOver = null;
+  this.onMouseOut = null;
 
   this._oldX = 0;
   this._oldY = 0;
@@ -40,6 +43,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._scaleY = 1;
   this._canvas = null;
   this._underCursor = false;
+  this._lastObjectUnderCursor = null;
   this._backBufferCanvas = null;
   this._backBufferContext;
   this._context = null;
@@ -275,30 +279,47 @@ canvaslib.DisplayContainer.prototype = {
    */
   _handleMouseEventsAllChildren: function() {
     var i = 0;
-    var eventCalled = false;
+    var objectUnderCursor = null;
+    var obj = null;
 
     if(this.isSuperDisplayContainer()) {
       // loop all children
       for(i = this._allChildren.length - 1; i >= 0; i--) {
-        if(this._allChildren[i]._visible) {
+        obj = this._allChildren[i];
+
+        if(obj._visible && obj.mouseEnabled) {
           // draw on backbuffer for collision detection
           this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
           this._backBufferContext.save();
-          this._setupContext(this._backBufferContext, this._allChildren[i]);
+          this._setupContext(this._backBufferContext, obj);
           this._backBufferContext.beginPath();
-          this._allChildren[i]._draw(this._backBufferContext, true);
 
-          // detect mouse
-          eventCalled = this._detectMouseInPath(this._backBufferContext, this._allChildren[i]);
-          this._backBufferContext.restore();
+          obj._draw(this._backBufferContext, true);
 
-          // this is to prevent calling mouse events for non-visible obj's
-          if(eventCalled) {
-            return;
+          // did the mouse hit an object?
+          if(this._backBufferContext.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
+            this._backBufferContext.restore();
+            // yes we did, yer!
+            objectUnderCursor = obj;
+            break;
           }
 
+          this._backBufferContext.restore();
         }
       }
+
+      // is the current object than the lost object that hit the mouse?
+      if(this.superDisplayContainer()._lastObjectUnderCursor != objectUnderCursor) {
+        // call mouseout event
+        if(this.superDisplayContainer()._lastObjectUnderCursor && this.superDisplayContainer()._lastObjectUnderCursor.onMouseOut)
+          this.superDisplayContainer()._lastObjectUnderCursor.onMouseOut();
+
+        if(objectUnderCursor && objectUnderCursor.onMouseOver)
+          objectUnderCursor.onMouseOver();
+      }
+
+      // remember last object
+      this.superDisplayContainer()._lastObjectUnderCursor = objectUnderCursor;
 
     } else {
       this.superDisplayContainer()._handleMouseEventsAllChildren();
@@ -309,12 +330,12 @@ canvaslib.DisplayContainer.prototype = {
   /**
    * Retrieves all children in the tree
    */
-  _getAllChildren: function() {
+  _getAllChildren: function(onlyVisibles) {
     var i = 0;
     var children = [];
 
     if(this.isSuperDisplayContainer()) {
-      this._getChildren(this, children);
+      this._getChildren(this, children, onlyVisibles);
       return children;
 
     } else {
@@ -326,14 +347,15 @@ canvaslib.DisplayContainer.prototype = {
   /**
    * Retrieves ALL children from given parent and it's sub-children
    */
-  _getChildren: function(fromParent, collectedChildren) {
+  _getChildren: function(fromParent, collectedChildren, onlyVisibles) {
     var i = 0;
 
     for(i = 0; i < fromParent.children.length; i++) {
-      collectedChildren.push(fromParent.children[i]);
+      if(!onlyVisibles || (onlyVisibles && fromParent.children[i].visible))
+        collectedChildren.push(fromParent.children[i]);
 
-      if(fromParent.children[i].children && fromParent.children[i].children.length > 0)
-        this._getChildren(fromParent.children[i], collectedChildren);
+      if((!onlyVisibles || (onlyVisibles && fromParent.children[i].visible)) && fromParent.children[i].children && fromParent.children[i].children.length > 0)
+        this._getChildren(fromParent.children[i], collectedChildren, onlyVisibles);
     }
   },
 
@@ -350,33 +372,6 @@ canvaslib.DisplayContainer.prototype = {
       return parent;
 
     }
-  },
-
-  /**
-   * Sets the mouse hit detection flag
-   */
-  _detectMouseInPath: function(context, displayObj) {
-    if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
-      if(!displayObj._underCursor) {
-        displayObj._underCursor = true;
-
-        if(displayObj.mouseOver) {
-          displayObj.mouseOver();
-          return true;
-        }
-      }
-    } else {
-      if(displayObj._underCursor) {
-        displayObj._underCursor = false;
-
-        if(displayObj.mouseOut) {
-          displayObj.mouseOut();
-          return true;
-        }
-      }
-    }
-
-    return false;
   },
 
   /**
