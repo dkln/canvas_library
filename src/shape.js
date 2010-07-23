@@ -78,14 +78,14 @@ canvaslib.Shape.prototype = {
   moveTo: function(x, y) {
     this._cursorX = x;
     this._cursorY = y;
-    this._drawingCommands.push(['moveTo', x, y]);
+    this._drawingCommands.push([true, 'moveTo', x, y]);
   },
 
   /**
    * Sets the current line thickness
    */
   lineWidth: function(thickness) {
-    this._drawingCommands.push(['lineWidth', thickness]);
+    this._drawingCommands.push([true, 'lineWidth', thickness]);
   },
 
   /**
@@ -94,7 +94,7 @@ canvaslib.Shape.prototype = {
    * Can be butt, round or square
    */
   lineCap: function(cap) {
-    this._drawingCommands.push(['lineCap', cap]);
+    this._drawingCommands.push([true, 'lineCap', cap]);
   },
 
   /**
@@ -103,7 +103,7 @@ canvaslib.Shape.prototype = {
    * Possible values: bevel, round or miter
    */
   lineJoin: function(join) {
-    this._drawingCommands.push(['lineJoin', join]);
+    this._drawingCommands.push([true, 'lineJoin', join]);
   },
 
   /**
@@ -111,7 +111,7 @@ canvaslib.Shape.prototype = {
    */
   lineTo: function(x, y) {
     this._madeChanges = true;
-    this._drawingCommands.push(['lineTo', x, y]);
+    this._drawingCommands.push([true, 'lineTo', x, y]);
   },
 
   /**
@@ -119,7 +119,7 @@ canvaslib.Shape.prototype = {
    */
   bezierCurveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
     this._madeChanges = true;
-    this._drawingCommands.push(['bezierCurveTo', cp1x, cp1y, cp2x, cp2y, x, y]);
+    this._drawingCommands.push([true, 'bezierCurveTo', cp1x, cp1y, cp2x, cp2y, x, y]);
   },
 
   /**
@@ -127,14 +127,14 @@ canvaslib.Shape.prototype = {
    */
   quadraticCurveTo: function(cpx, cpy, x, y) {
     this._madeChanges = true;
-    this._drawingCommands.push(['quadraticCurveTo', cpx, cpy, x, y]);
+    this._drawingCommands.push([true, 'quadraticCurveTo', cpx, cpy, x, y]);
   },
 
   /**
    * Sets the current miter limit ratio
    */
   miterLimit: function(ratio) {
-    this._drawingCommands.push(['miterLimit', ratio]);
+    this._drawingCommands.push([true, 'miterLimit', ratio]);
   },
 
   /**
@@ -146,8 +146,8 @@ canvaslib.Shape.prototype = {
     if(color) this.fillStyle(color);
 
     // also add rect drawing command to add collision detection
-    this._drawingCommands.push(['rect', x, y, width, height]);
-    this._drawingCommands.push(['fillRect', x, y, width, height]);
+    this._drawingCommands.push([true, 'rect', x, y, width, height]);
+    this._drawingCommands.push([false, 'fillRect', x, y, width, height]);
   },
 
   /**
@@ -162,7 +162,7 @@ canvaslib.Shape.prototype = {
    */
   arc: function(x, y, startRadius, endRadius, antiClockwise) {
     this._madeChanges = true;
-    this._drawingCommands.push(['arc', x, y, startRadius, endRadius, antiClockwise]);
+    this._drawingCommands.push([true, 'arc', x, y, startRadius, endRadius, antiClockwise]);
   },
 
   /**
@@ -172,8 +172,8 @@ canvaslib.Shape.prototype = {
     this._madeChanges = true;
 
     // also add rect drawing command to add collision detection
-    this._drawingCommands.push(['rect', x, y, width, height]);
-    this._drawingCommands.push(['strokeRect', x, y, width, height]);
+    this._drawingCommands.push([true, 'rect', x, y, width, height]);
+    this._drawingCommands.push([false, 'strokeRect', x, y, width, height]);
   },
 
   /**
@@ -181,21 +181,21 @@ canvaslib.Shape.prototype = {
    */
   clearRect: function(x, y, width, height) {
     this._madeChanges = true;
-    this._drawingCommands.push(['clearRect', x, y, width, height]);
+    this._drawingCommands.push([true, 'clearRect', x, y, width, height]);
   },
 
   /**
    * Sets the fillstyle
    */
   fillStyle: function(color) {
-    this._drawingCommands.push(['fillStyle=', color]);
+    this._drawingCommands.push([false, 'fillStyle=', color]);
   },
 
   /**
    * Changes the style of strokes
    */
   strokeStyle: function(color) {
-    this._drawingCommands.push(['strokeStyle=', color]);
+    this._drawingCommands.push([false, 'strokeStyle=', color]);
   },
 
   /**
@@ -203,7 +203,7 @@ canvaslib.Shape.prototype = {
    */
   globalAlpha: function(alpha) {
     this._madeChanges = true;
-    this._drawCommands.push(['globalAlpha=', alpha]);
+    this._drawCommands.push([false, 'globalAlpha=', alpha]);
   },
 
   /**
@@ -211,7 +211,7 @@ canvaslib.Shape.prototype = {
    */
   fill: function() {
     this._madeChanges = true;
-    this._drawCommands.push( { cmd: 'fill' } );
+    this._drawCommands.push([false, 'fill']);
   },
 
   /**
@@ -229,25 +229,23 @@ canvaslib.Shape.prototype = {
       // draw the stuff on the canvas
       // does the drawing command have any params?
       // setter?
-      if(this._drawingCommands[i][0].substr(-1, 1) == '=' && this._drawingCommands[i].length == 2) {
-        context[this._drawingCommands[i][0].substr(0, this._drawingCommands[i][0].length - 1)] = this._drawingCommands[i][1];
-        //console.log(this._drawingCommands[i][0] + this._drawingCommands[i][1]);
+      // draw in hitArea mode?
+      if(!drawHitarea || (drawHitarea && this._drawingCommands[i][0])) {
+        if(this._drawingCommands[i][1].substr(-1, 1) == '=' && this._drawingCommands[i].length == 3) {
+          context[this._drawingCommands[i][1].substr(0, this._drawingCommands[i][1].length - 1)] = this._drawingCommands[i][2];
 
-      } else if(this._drawingCommands[i].length > 1) {
-        // yes translate them
-        context[this._drawingCommands[i][0]].apply(context, this._drawingCommands[i].slice(1));
+        } else if(this._drawingCommands[i].length > 2) {
+          // yes translate them
+          context[this._drawingCommands[i][1]].apply(context, this._drawingCommands[i].slice(2));
 
-      } else {
-        // nope!
-        context[this._drawingCommands[i][0]]();
+        } else {
+          // nope!
+          context[this._drawingCommands[i][1]]();
+        }
       }
     }
 
     this._madeChanges = false;
-  },
-
-  _cacheBitmap: function() {
-    this._imageData = this._backBufferContext.getImageData(0, 0, this._canvas.width, this._canvas.height);
   }
 };
 

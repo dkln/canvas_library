@@ -39,7 +39,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._scaleX = 1;
   this._scaleY = 1;
   this._canvas = null;
-  this._mouseHit = false;
+  this._underCursor = false;
   this._backBufferCanvas = null;
   this._backBufferContext;
   this._context = null;
@@ -161,6 +161,7 @@ canvaslib.DisplayContainer.prototype = {
   draw: function(clear) {
     if(this.isSuperDisplayContainer()) {
       this._drawAllChildren(clear);
+      this._handleMouseEventsAllChildren();
 
     } else {
       this.superDisplayContainer().draw(clear);
@@ -260,7 +261,25 @@ canvaslib.DisplayContainer.prototype = {
 
           // restore it
           this._context.restore();
+        }
+      }
 
+    } else {
+      this.superDisplayContainer()._drawAllChildren(clear);
+
+    }
+  },
+
+  /**
+   * Fires all appropiate mouse events for every display obj
+   */
+  _handleMouseEventsAllChildren: function() {
+    var i = 0;
+
+    if(this.isSuperDisplayContainer()) {
+      // loop all children
+      for(i = this._allChildren.length - 1; i >= 0; i--) {
+        if(this._allChildren[i]._visible) {
           // draw on backbuffer for collision detection
           this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
           this._backBufferContext.save();
@@ -276,7 +295,7 @@ canvaslib.DisplayContainer.prototype = {
       }
 
     } else {
-      this.superDisplayContainer()._drawAllChildren();
+      this.superDisplayContainer()._handleMouseEventsAllChildren();
 
     }
   },
@@ -332,13 +351,13 @@ canvaslib.DisplayContainer.prototype = {
    */
   _detectMouseInPath: function(context, displayObj) {
     if(context.isPointInPath(this.superDisplayContainer()._mouseX, this.superDisplayContainer()._mouseY)) {
-      if(!displayObj._mouseHit) {
-        displayObj._mouseHit = true;
+      if(!displayObj._underCursor) {
+        displayObj._underCursor = true;
         if(displayObj.mouseOver) displayObj.mouseOver();
       }
     } else {
-      if(displayObj._mouseHit) {
-        displayObj._mouseHit = false;
+      if(displayObj._underCursor) {
+        displayObj._underCursor = false;
         if(displayObj.mouseOut) displayObj.mouseOut();
       }
     }
