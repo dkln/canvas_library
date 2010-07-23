@@ -18,6 +18,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   this.children = [];
   this.visible = true;
   this.mouseEnabled = true;
+  this.useHandCursor = false;
   this.shadow = false;
   this.shadowBlur = 0;
   this.shadowColor = 0;
@@ -321,11 +322,24 @@ canvaslib.DisplayContainer.prototype = {
       // is the current object than the lost object that hit the mouse?
       if(this._lastObjectUnderCursor != objectUnderCursor) {
         // call mouseout event
-        if(this._lastObjectUnderCursor && this._lastObjectUnderCursor.onMouseOut)
-          this._lastObjectUnderCursor.onMouseOut();
+        if(this._lastObjectUnderCursor) {
+          if(this._lastObjectUnderCursor.onMouseOut)
+            this._lastObjectUnderCursor.onMouseOut();
 
-        if(objectUnderCursor && objectUnderCursor.onMouseOver)
-          objectUnderCursor.onMouseOver();
+          // hide hand cursor
+          if(this._lastObjectUnderCursor.useHandCursor)
+            this._setHandCursor(false);
+        }
+
+        if(objectUnderCursor) {
+          // call handler?
+          if(objectUnderCursor.onMouseOver)
+            objectUnderCursor.onMouseOver();
+
+          // show hand cursor?
+          if(objectUnderCursor.useHandCursor)
+            this._setHandCursor(true);
+        }
 
       // do we have to fire an mouse move event?
       } else if(objectUnderCursor && (this._oldMouseX != this._mouseX || this._oldMouseY != this._mouseY) && objectUnderCursor.onMouseMove) {
@@ -338,6 +352,14 @@ canvaslib.DisplayContainer.prototype = {
     } else {
       this.superDisplayContainer()._handleMouseEventsAllChildren();
 
+    }
+  },
+
+  _setHandCursor: function(showHand) {
+    if(showHand) {
+      this._canvas.style.cursor = 'pointer';
+    } else {
+      this._canvas.style.cursor = '';
     }
   },
 
