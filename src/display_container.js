@@ -265,6 +265,7 @@ canvaslib.DisplayContainer.prototype = {
           this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
           this._backBufferContext.save();
           this._setupContext(this._backBufferContext, this._allChildren[i]);
+          this._backBufferContext.beginPath();
           this._allChildren[i]._draw(this._backBufferContext);
 
           // detect mouse
