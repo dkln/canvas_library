@@ -5,7 +5,7 @@ canvaslib.Utils = {
         to[property] = from[property];
     }
   },
-  
+
   bind: function(self, funct) {
     var context = self;
 
