@@ -6,6 +6,10 @@ Tested on iPhone. Demo's do not run very smooth but it is a beginning!
 
 Note: this is NOT a Flash SWF parser for HTML 5 canvas.
 
+== Currently working on
+* refactoring mouse hit detection and event handling
+* HTML 5 mouse events
+
 == Todo/notes
 * efficient tween management when tweens "collapse"
 * investigate HTML 5 mobile mouse events (swipe, rotate etc.)
