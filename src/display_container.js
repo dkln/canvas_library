@@ -206,8 +206,8 @@ canvaslib.DisplayContainer.prototype = {
       translatedX += theParent.x;
       translatedY += theParent.y;
       translatedRotation += theParent.rotation;
-      translatedScaleX += theParent.scaleX;
-      translatedScaleY += theParent.scaleY;
+      translatedScaleX *= theParent.scaleX;
+      translatedScaleY *= theParent.scaleY;
       if(!theParent.visible) visible = false;
 
       theParent = theParent._parentDisplayContainer;
