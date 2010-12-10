@@ -197,8 +197,8 @@ canvaslib.DisplayContainer.prototype = {
     var translatedX = 0;
     var translatedY = 0;
     var translatedRotation = 0;
-    var translatedScaleX = 0;
-    var translatedScaleY = 0;
+    var translatedScaleX = 1;
+    var translatedScaleY = 1;
     var theParent = this;
     var visible = true;
 
