@@ -1,16 +1,13 @@
 var screen = new canvaslib.DisplayContainer('screen');
 var renderer = new canvaslib.Renderer(screen);
+var logo;
 
+canvaslib.StackedLoader.load('logo', 'sprite', 'logo.spr');
+canvaslib.StackedLoader.start( function() {
+  logo = canvaslib.StackedLoader.get('logo');
+  screen.addChild(logo);
 
-//var sprite = new canvaslib.PixelSprite();
-//sprite.drawPixel(0, 0, 'rgba(255, 0, 0, 1)');
-//sprite.drawPixel(1, 0, 'rgba(255, 0, 0, 1)');
-//sprite.drawPixel(2, 0, 'rgba(255, 0, 0, 1)');
-//sprite.drawPixel(0, 1, 'rgba(255, 0, 0, 1)');
-//sprite.drawPixel(1, 1, 'rgba(255, 0, 0, 1)');
-//sprite.submit();
-//
-//screen.addChild(sprite);
+  canvaslib.Tween.to(logo, 5000, { x: 0, y: 200 });
+});
 
 renderer.run(25);
-

@@ -53,8 +53,12 @@ canvaslib.StackedLoader = {
       image = null;
 
     } else if(this._toLoad.type == 'sprite') {
-      this._stack[this._toLoad.id] = new canvaslib.PixelSprite(data);
+      image = new canvaslib.PixelSprite(data);
+      image.drawPixelMap(data);
 
+      this._stack[this._toLoad.id] = image;
+
+      image = null;
     }
 
     // ok we're done with this item matey! remove it from stack
@@ -92,7 +96,7 @@ canvaslib.StackedLoader = {
           this._stack[this._toLoad.id] = {}
           $.ajax( { url: this._toLoad.url,
                     dataType: 'text',
-                    success: canvaslib.Utils.bind(this, this._handleJqueryLoadComplete) } );
+                    success: canvaslib.Utils.bind(this, this._handleAssetLoadComplete) } );
           break;
 
         case 'image':
