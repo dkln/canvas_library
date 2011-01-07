@@ -59,7 +59,7 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._parentDisplayContainer = null;
   this._superDisplayContainer = null;
   this._childrenChanged = false;
-  this._allChildren = null;
+  this._allChildren = [];
 
   if(canvasId) {
     this._canvas = document.getElementById(canvasId);
@@ -176,7 +176,7 @@ canvaslib.DisplayContainer.prototype = {
       // sets mouse over events if not present yet
       this._setupMouse();
       this._drawAllChildren(clear);
-      this._handleMouseEventsAllChildren();
+      this._handleMouseEventsOfAllChildren();
 
     } else {
       this.superDisplayContainer().draw(clear);
@@ -483,8 +483,8 @@ canvaslib.DisplayContainer.prototype = {
 
     super._oldMouseX = super._oldMouseX;
     super._oldMouseX = super._oldMouseY;
-    super._mouseX = event.clientX - self._canvas.offsetLeft;
-    super._mouseY = event.clientY - self._canvas.offsetTop;
+    super._mouseX = event.clientX - this._canvas.offsetLeft;
+    super._mouseY = event.clientY - this._canvas.offsetTop;
     super.localX = super._mouseX;
     super.localY = super._mouseY;
 

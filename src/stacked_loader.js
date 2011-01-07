@@ -1,5 +1,5 @@
 /**
- * Asset loader 
+ * Asset loader
  *
  * @author D Lawson <webmaster@altovista.nl>
  */
@@ -40,7 +40,7 @@ canvaslib.StackedLoader = {
     return this._stack[id];
   },
 
-  _handleAssetLoadComplete: function() {
+  _handleAssetLoadComplete: function(data, status, xmlHttpRequest) {
     var image;
 
     // check if this is a image so convert it in a bitmap obj
@@ -51,6 +51,10 @@ canvaslib.StackedLoader = {
       this._stack[this._toLoad.id] = new canvaslib.Bitmap(image);
 
       image = null;
+
+    } else if(this._toLoad.type == 'sprite') {
+      this._stack[this._toLoad.id] = new canvaslib.PixelSprite(data);
+
     }
 
     // ok we're done with this item matey! remove it from stack
@@ -84,6 +88,13 @@ canvaslib.StackedLoader = {
       this._toLoad = this._loadStack[0];
 
       switch(this._toLoad.type) {
+        case 'sprite':
+          this._stack[this._toLoad.id] = {}
+          $.ajax( { url: this._toLoad.url,
+                    dataType: 'text',
+                    success: canvaslib.Utils.bind(this, this._handleJqueryLoadComplete) } );
+          break;
+
         case 'image':
           this._stack[this._toLoad.id] = new Image();
           this._stack[this._toLoad.id].onload = canvaslib.Utils.bind(this, this._handleAssetLoadComplete);
