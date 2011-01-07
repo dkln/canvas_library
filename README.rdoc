@@ -33,6 +33,7 @@ The canvaslib consists of the following classes:
 * canvaslib.StackedLoader: class that manages downloads for images or audiosamples
 * canvaslib.TextField: draws texts
 * canvaslib.Tween: class that manages animations for all displayobject's
+* canvaslib.PixelSprite: class that renders retro pixels!
 
 Note that the canvaslib.Tween & canvaslib.StackedLoader classes are static classes.
 
@@ -161,7 +162,28 @@ Example of tween and mouse interaction:
     canvaslib.Tween.to(shape, 500, { alpha: 1 });
   };
 
+== Pixel fun
+
+  pixels = canvaslib.PixelSprite();
+  pixels.drawPixel(0, 0, 'rgba(128, 128, 128, 1)');
+  pixels.drawPixel(1, 0, 'rgba(128, 128, 128, 1)');
+  pixels.drawPixel(2, 0, 'rgba(128, 128, 128, 1)');
+  pixels.drawPixel(0, 1, 'rgba(128, 128, 128, 1)');
+  pixels.drawPixel(0, 2, 'rgba(128, 128, 128, 1)');
+  pixels.drawPixel(0, 3, 'rgba(128, 128, 128, 1)');
+  pixels.submitPixel();
+
+  screen.addChild(pixels);
+
+Or even better, load a retro sprite file!
+
+  canvaslib.StackedLoader.load('logo', 'sprite', 'logo.spr');
+  canvaslib.StackedLoader.start( function() {
+    logo = canvaslib.StackedLoader.get('logo');
+    screen.addChild(logo);
+  });
+
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
 
-Copyright 2010, Diederick Lawson - Altovista. Released under the BSD license.
+Copyright 2010 - 2011, Diederick Lawson - Altovista. Released under the BSD license.
