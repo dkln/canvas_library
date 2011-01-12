@@ -55,6 +55,8 @@ canvaslib.DisplayContainer = function(canvasId) {
   this._lastObjectUnderCursor = null;
   this._backBufferCanvas = null;
   this._backBufferContext;
+  this._hitBufferCanvas = null;
+  this._hitBufferContext = null;
   this._context = null;
   this._parentDisplayContainer = null;
   this._superDisplayContainer = null;
@@ -65,11 +67,13 @@ canvaslib.DisplayContainer = function(canvasId) {
     this._canvas = document.getElementById(canvasId);
     this._context = this._canvas.getContext('2d');
 
-    this._backBufferCanvas = document.createElement('canvas');
-    this._backBufferCanvas.width = this._canvas.width;
-    this._backBufferCanvas.height = this._canvas.height;
+    this._backBufferCanvas = this._cloneCanvas();
     this._backBufferContext = this._backBufferCanvas.getContext('2d');
+
+    this._hitBufferCanvas = this._cloneCanvas();
+    this._hitBufferContext = this._hitBufferCanvas.getContext('2d');
   }
+
 };
 
 canvaslib.DisplayContainer.prototype = {
@@ -80,6 +84,16 @@ canvaslib.DisplayContainer.prototype = {
     return this._parentDisplayContainer;
   },
 
+  /**
+   * Clones the current canvas
+   */
+  _cloneCanvas: function() {
+    var canvas = document.createElement('canvas');
+    canvas.width = this._canvas.width;
+    canvas.height = this._canvas.height;
+
+    return canvas;
+  },
   /**
    * Find super parent object
    */
@@ -120,6 +134,8 @@ canvaslib.DisplayContainer.prototype = {
     child._canvas = this.superDisplayContainer()._canvas;
     child._backBufferCanvas = this.superDisplayContainer()._backBufferCanvas;
     child._backBufferContext = this.superDisplayContainer()._backBufferContext;
+    child._hitBufferCanvas = this.superDisplayContainer()._hitBufferCanvas;
+    child._hitBufferContext = this.superDisplayContainer()._hitBufferContext;
 
     // add to displaylist
     this.children.push(child);
@@ -159,6 +175,8 @@ canvaslib.DisplayContainer.prototype = {
       child._parentDisplayContainer = null;
       child._canvas = null;
       child._context = null;
+      child._hitBufferCanvas = null;
+      child._hitBufferContext = null;
       child._backBufferCanvas = null;
       child._backBufferContext = null;
 
@@ -253,7 +271,9 @@ canvaslib.DisplayContainer.prototype = {
     var newCanvasPos;
 
     if(this.isSuperDisplayContainer()) {
-      if(clear) this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+      // first step is to draw to the backbuffer
+      //
+      if(clear) this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
 
       // retrieve ALL children
       if(this._childrenChanged) {
@@ -268,16 +288,21 @@ canvaslib.DisplayContainer.prototype = {
         if(this._allChildren[i]._visible) {
           // draw on surface
           // setup context
-          this._context.save();
-          this._setupContext(this._context, this._allChildren[i]);
+          this._backBufferContext.save();
+          this._setupContext(this._backBufferContext, this._allChildren[i]);
 
           // go draw!
-          this._allChildren[i]._draw(this._context);
+          this._allChildren[i]._draw(this._backBufferContext);
 
           // restore it
-          this._context.restore();
+          this._backBufferContext.restore();
         }
       }
+
+      // final step is to draw to the actual screen
+      //
+      this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
+      this._context.drawImage(this._backBufferCanvas, 0, 0);
 
     } else {
       this.superDisplayContainer()._drawAllChildren(clear);
@@ -286,7 +311,7 @@ canvaslib.DisplayContainer.prototype = {
   },
 
   /**
-   *
+   * Draws all objects in the hitbuffer to check which objects are hit by the mouse cursor
    */
   _getCurrentObjectUnderCursor: function() {
     var i = 0;
@@ -299,26 +324,26 @@ canvaslib.DisplayContainer.prototype = {
 
       if(obj._visible && obj.mouseEnabled) {
         // draw on backbuffer for collision detection
-        this._backBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
-        this._backBufferContext.save();
-        this._setupContext(this._backBufferContext, obj);
-        this._backBufferContext.beginPath();
+        this._hitBufferContext.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        this._hitBufferContext.save();
+        this._setupContext(this._hitBufferContext, obj);
+        this._hitBufferContext.beginPath();
 
-        obj._draw(this._backBufferContext, true);
+        obj._draw(this._hitBufferContext, true);
 
         // set local mouse X and Y
         obj.localX = this._mouseX - this._canvasX;
         obj.localY = this._mouseY - this._canvasY;
 
         // did the mouse hit an object?
-        if(this._backBufferContext.isPointInPath(this._mouseX, this._mouseY)) {
-          this._backBufferContext.restore();
+        if(this._hitBufferContext.isPointInPath(this._mouseX, this._mouseY)) {
+          this._hitBufferContext.restore();
           // yes we did, yer!
           objectUnderCursor = obj;
           break;
         }
 
-        this._backBufferContext.restore();
+        this._hitBufferContext.restore();
       }
     }
 
@@ -462,7 +487,7 @@ canvaslib.DisplayContainer.prototype = {
   _setupContext: function(context, displayObj) {
     // sets the alpha of the image
     context.globalAlpha = displayObj.alpha;
-    context.translate(displayObj._canvasX, displayObj._canvasY);
+    context.translate(parseInt(displayObj._canvasX), parseInt(displayObj._canvasY));
     context.rotate(canvaslib.Math.angleToRadians(displayObj._rotation));
     context.scale(displayObj._scaleX, displayObj._scaleY);
 

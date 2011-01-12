@@ -45,14 +45,14 @@ canvaslib.Shape.prototype = {
    * Creates a radial gradient object
    */
   _createRadialGradient: function(x1, y1, r1, x2, y2, r2, colorStops) {
-    var gradient = this._context.createRadialGradient(x1, y1, r1, x2, y2, r2);
+    var gradient = this._backBufferContext.createRadialGradient(x1, y1, r1, x2, y2, r2);
     this.addColorStops(gradient, colorStops);
 
     return gradient;
   },
 
   _createLinearGradient: function(x1, y1, x2, y2, colorStops) {
-    var gradient = this._context.createLinearGradient(x1, y1, x2, y2);
+    var gradient = this._backBufferContext.createLinearGradient(x1, y1, x2, y2);
     this.addColorStops(gradient, colorStops);
 
     return gradient;

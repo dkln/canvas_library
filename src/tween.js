@@ -30,6 +30,9 @@ canvaslib.Tween = {
     this._tweens.push(tween);
   },
 
+  /**
+   * Kills animation of given object
+   */
   kill: function(obj) {
     var i = 0;
 
@@ -69,6 +72,9 @@ canvaslib.Tween = {
     }
   },
 
+  /**
+   * Cleans up array of tweens
+   */
   _cleanup: function() {
     var i;
 
