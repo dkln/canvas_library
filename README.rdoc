@@ -186,4 +186,4 @@ Or even better, load a retro sprite file!
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!
 
-Copyright 2010 - 2011, Diederick Lawson - Altovista. Released under the BSD license.
+Copyright 2010 - 2011, Diederick Lawson - Altovista. Released under the FreeBSD license.

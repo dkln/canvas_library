@@ -1,12 +1,41 @@
 /**
-  * Pixelator machine
-  *
-  * @author D Lawson <webmaster@altovista.nl>
-  */
+ * Copyright 2010-2011 Diederick Lawson. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are
+ * permitted provided that the following conditions are met:
+ *
+ *    1. Redistributions of source code must retain the above copyright notice, this list of
+ *       conditions and the following disclaimer.
+ *
+ *    2. Redistributions in binary form must reproduce the above copyright notice, this list
+ *       of conditions and the following disclaimer in the documentation and/or other materials
+ *       provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY DIEDERICK LAWSON "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL DIEDERICK LAWSON OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those of the
+ * authors and should not be interpreted as representing official policies, either expressed
+ * or implied, of Diederick Lawson.
+ *
+ * PixelSprite Class
+ *
+ * @author D. Lawson <webmaster@altovista.nl>
+ */
 canvaslib.PixelSprite = function() {
   canvaslib.Shape.call(this);
+
   this._grid = [];
   this.pixelSize = 4;
+
+  // default palette (ANSI colors)
   this.colorPalette = [ 'rgba(0, 0, 0, 1)',
                         'rgba(170, 0, 0, 1)',
                         'rgba(0, 170, 0, 1)',
@@ -27,6 +56,9 @@ canvaslib.PixelSprite = function() {
 };
 
 canvaslib.PixelSprite.prototype = {
+  /**
+   * Draws the given pixelmap (string)
+   */
   drawPixelMap: function(map) {
     var x = 0;
     var y = 0;
@@ -51,6 +83,9 @@ canvaslib.PixelSprite.prototype = {
     this.submitPixels();
   },
 
+  /**
+   * Draws a pixel
+   */
   drawPixel: function(x, y, color) {
     if(!this._grid[y])
       this._grid[y] = [];
@@ -58,14 +93,16 @@ canvaslib.PixelSprite.prototype = {
     this._grid[y][x] = color;
   },
 
+  /**
+   * Removes pixel from grid
+   */
   removePixel: function(x, y) {
     this._grid[y][x] = null;
   },
 
-  _drawLine: function(x, y, xs, color) {
-    this.fillRect(xs * this.pixelSize, y * this.pixelSize, (x - xs) * this.pixelSize, this.pixelSize, color);
-  },
-
+  /**
+   * Submits the pixels in the _grid to drawing commands
+   */
   submitPixels: function() {
     var x = 0;
     var y = 0;
@@ -94,6 +131,13 @@ canvaslib.PixelSprite.prototype = {
       }
     }
   }
+
+  /**
+   * Draws a pixel line
+   */
+  _drawLine: function(x, y, xs, color) {
+    this.fillRect(xs * this.pixelSize, y * this.pixelSize, (x - xs) * this.pixelSize, this.pixelSize, color);
+  },
 };
 
 canvaslib.Utils.addOwnProperties(canvaslib.Shape.prototype, canvaslib.PixelSprite.prototype);
