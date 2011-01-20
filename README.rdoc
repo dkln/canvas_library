@@ -1,5 +1,9 @@
 = HTML Canvas Javascript Library (in the works)
 
+== Important note
+I will be rewriting the Canvas Lib in Coffee script.
+
+== About canvas_library
 Handy for those who're used to the nature of Flash / Actionscript 3.0 (with all the nice nested DisplayContainers) but you just want to use Javascript because it's cool and open. 
 
 Tested on iPhone. Demo's do not run very smooth but it is a beginning!
