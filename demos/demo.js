@@ -2,7 +2,7 @@
   var run;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   run = function() {
-    var logo, mouseShape, otherShape, renderer, someShape, stage;
+    var logo, mouseShape, otherShape, renderer, someShape, stage, text;
     stage = new Stage('test_canvas');
     logo = null;
     someShape = new Shape();
@@ -30,8 +30,13 @@
       mouseShape.x = stage.mouseX;
       return mouseShape.y = stage.mouseY;
     }, this);
+    text = new TextField();
+    text.text = "canvas_library demo";
+    text.x = 10;
+    text.y = 470;
     stage.onMouseUp = __bind(function() {
       if (logo) {
+        Tween.kill(logo);
         return Tween.to(logo, 500, {
           x: stage.mouseX,
           y: stage.mouseY
@@ -41,6 +46,7 @@
     stage.addChild(someShape);
     stage.addChild(otherShape);
     stage.addChild(mouseShape);
+    stage.addChild(text);
     StackedLoader.add('logo', 'bitmap', 'logo.png');
     StackedLoader.load(function() {
       logo = StackedLoader.get('logo');

@@ -38,12 +38,18 @@ class StackedLoader
     @stack[@toLoad.id] = new XMLHttpRequest()
     @stack[@toLoad.id].onreadystatechange = =>
       if @stack[@toLoad.id].readyState == 4 && @stack[@toLoad.id].status == 200
-        @handleStringLoadComplete()
+        @['handle' + Utils.firstUpcase(@toLoad.type) + 'LoadComplete']()
+
+    @stack[@toLoad.id].open 'GET', @toLoad.url, true
+    @stack[@toLoad.id].send null
 
   @loadBitmap: ->
     @stack[@toLoad.id] = new Image()
     @stack[@toLoad.id].onload = => @handleBitmapLoadComplete()
     @stack[@toLoad.id].src = @toLoad.url
+
+  @loadSprite: ->
+    @loadString()
 
   @loadAudio: ->
     @stack[@toLoad.id] = new Audio()
@@ -60,6 +66,11 @@ class StackedLoader
   @handleStringLoadComplete: ->
     @stack[@toLoad.id].onreadystatechange = null
     @stack[@toLoad.id] = @stack[@toLoad.id].responseText
+    @handleAssetLoadComplete
+
+  @handleSpriteLoadComplete: ->
+    @stack[@toLoad.id].onreadystatechange = null
+    @stack[@toLoad.id] = new PixelSprite(@stack[@toLoad.id].responseText)
     @handleAssetLoadComplete
 
   @handleAssetLoadComplete: ->

@@ -37,22 +37,35 @@ run = ->
     mouseShape.x = stage.mouseX
     mouseShape.y = stage.mouseY
 
+  # some text
+  text = new TextField()
+  text.text = "canvas_library demo"
+  text.x = 10
+  text.y = 470
+
   stage.onMouseUp = =>
     if logo
+      Tween.kill logo
       Tween.to logo, 500, { x: stage.mouseX, y: stage.mouseY }
 
   stage.addChild someShape
   stage.addChild otherShape
   stage.addChild mouseShape
+  stage.addChild text
 
   # load an external bitmap
   StackedLoader.add 'logo', 'bitmap', 'logo.png'
+  #StackedLoader.add 'sprite', 'sprite', 'logo.spr'
+
   StackedLoader.load ->
     logo = StackedLoader.get('logo')
     stage.addChild logo
 
     logo.alpha = 0
     Tween.to logo, 10000, { alpha: 1 }
+
+    #sprite = StackerLoader.get('sprite')
+    #stage.addChild sprite
 
   # setup renderer and connect it to the stage and run at 25 fps
   renderer = new Renderer(stage, 25)
