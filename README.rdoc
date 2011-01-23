@@ -1,72 +1,52 @@
-= HTML Canvas Javascript Library (in the works)
-
-== Important note
-I will be rewriting the Canvas Lib in Coffee script.
+= HTML Canvas Javascript Library
 
 == About canvas_library
-Handy for those who're used to the nature of Flash / Actionscript 3.0 (with all the nice nested DisplayContainers) but you just want to use Javascript because it's cool and open. 
 
-Tested on iPhone. Demo's do not run very smooth but it is a beginning!
-
-Note: this is NOT a Flash SWF parser for HTML 5 canvas.
-
-== Demo's
-
-Renderer + scaleX & scaleY demo:
-http://altovista.nl/canvas_lib/samples/renderer.html
-
-Bitmap drawing + Stacked loader demo:
-http://altovista.nl/canvas_lib/samples/loader.html
-
-Tweening demo:
-http://altovista.nl/canvas_lib/samples/tween.html
-
-Text demo:
-http://altovista.nl/canvas_lib/samples/text.html
-
-Mouse + tween demo:
-http://altovista.nl/canvas_lib/samples/mouse.html
-
-== Classes
-The canvaslib consists of the following classes:
-* canvaslib.Bitmap: draws external loaded bitmaps
-* canvaslib.Math: holds mathematical functions
-* canvaslib.DisplayContainer: basic graphical object and drawer
-* canvaslib.Shape: graphical object that holds a shape
-* canvaslib.Renderer: class that manages rendering for animations
-* canvaslib.StackedLoader: class that manages downloads for images or audiosamples
-* canvaslib.TextField: draws texts
-* canvaslib.Tween: class that manages animations for all displayobject's
-* canvaslib.PixelSprite: class that renders retro pixels!
-
-Note that the canvaslib.Tween & canvaslib.StackedLoader classes are static classes.
+canvas_library is written in CoffeeScript.
+canvas_library gives you easy drawing, object and animation management for the HTML 5 Canvas element. The API itself looks a lot like the Flash drawing API.
 
 == Getting started
 
-A very simple demo.
+A very simple demo:
 
 HTML:
   <canvas id="test_canvas" width="320" height="240"></canvas>
 
-Javascript:
-  var mainDisplayObj = new canvaslib.DisplayContainer("test_canvas");
+Coffeescript:
+  run = ->
+    # this is the screen
+    stage = new Stage('test_canvas')
 
-  var someShape = new canvaslib.Shape();
-  someShape.x = 10;
-  someShape.y = 10;
+    # create a rectangle
+    someShape = new Shape()
+    someShape.x = 0
+    someShape.y = 0
 
-  someShape.fillStyle("rgba(0, 0, 0, 255)");
-  someShape.fillRect(0, 0, 50, 50);
+    someShape.fillStyle 'rgba(0, 0, 0, 1)'
+    someShape.fillRect 0, 0, 50, 50
 
-  mainDisplayObj.addChild(someShape);
+    # create another rectangle
+    otherShape = new Shape()
+    otherShape.alpha = .5
+    otherShape.fillStyle 'rgba(255, 0, 0, 1)'
+    otherShape.fillRect 0, 0, 25, 25
+    otherShape.x = 10
+    otherShape.y = 10
+    otherShape.scaleX = 1
+    otherShape.scaleY = 1
 
-  var renderer = new canvaslib.Renderer(mainDisplayObj);
+    stage.addChild someShape
+    stage.addChild otherShape
 
-  // framehandlers will be called every frame update
-  renderer.addFrameHandler( function() { someShape.x++ });
+    # setup renderer and connect it to the stage and run at 25 fps
+    renderer = new Renderer(stage, 25)
+    renderer.run()
 
-  // runs the render process for 25fps
-  renderer.run(25);
+    # tween some stuff
+    Tween.to someShape, 5000, { x: 100, y: 100 }
+    Tween.to otherShape, 20000, { rotation: 180, x: 320, y: 200, alpha: 1, scaleX: 1, scaleY: 1 }
+
+  window.onload = run
 
 == About DisplayContainer's
 
@@ -75,62 +55,59 @@ A DisplayContainer is an object that can hold other graphical objects. These gra
 The +x+ and +y+ position of graphical objects are relative and are translated to canvas +x+ and +y+ positions during the rendering process. This rendering process can be triggered by calling the +draw()+ function on any displaycontainer.
 
 Nesting objects:
-  var obj = new canvaslib.Shape();
-  obj.x = 10;
-  obj.y = 10;
+  obj = new Shape()
+  obj.x = 10
+  obj.y = 10
 
-  var otherObj = new canvaslib.Shape();
-  otherObj.x = 0;
-  otherObj.y = 0;
+  otherObj = new Shape()
+  otherObj.x = 0
+  otherObj.y = 0
 
-  obj.addChild(otherObj);
+  obj.addChild otherObj
 
-  var yetAnotherObj = new canvaslib.Shape();
-  yetAnotherObj.x = 0;
-  yetAnotherObj.y = 0;
+  yetAnotherObj = new Shape()
+  yetAnotherObj.x = 0
+  yetAnotherObj.y = 0
 
-  otherObj.addChild(yetAnotherObj);
+  otherObj.addChild yetAnotherObj
 
-  obj.draw();
+  stage.render
+
+Note: The stage is the main screen. This object also acts as an DisplayContainer.
 
 == Drawing shapes
 
 The drawing API is almost the same as the Canvas drawing API. If you want to draw paths to the canvas, use the +canvaslib.Shape+ class.
 
 Drawing rectangles:
-  var screen = new canvaslib.DisplayContainer("the_screen");
+  stage = new Stage("the_screen");
 
-  var rect = new canvaslib.Shape();
-  rect.x = 0;
-  rect.y = 0;
-  rect.fillStyle("rgb(255, 0, 0, 1)");
-  rect.fillRect(0, 0, 25, 25);
+  rect = new Shape()
+  rect.x = 0
+  rect.y = 0
+  rect.fillStyle "rgb(255, 0, 0, 1)"
+  rect.fillRect 0, 0, 25, 25
 
-  rect.fillStyle("rgb(0, 255, 0, 0.5)");
-  rect.fillRect(10, 10, 25, 25);
+  rect.fillStyle "rgb(0, 255, 0, 0.5)"
+  rect.fillRect 10, 10, 25, 25
 
-  screen.addChild(rect);
-
-  screen.draw();
+  stage.addChild rect
+  stage.render
 
 == Loading and drawing bitmaps
 
 Bitmaps can easily be loaded with the +canavaslib.StackedLoader+ class. The +canvaslib.StackedLoader+ manages all your assets so you can preload images or audio assets before rendering all your stuff.
-  var screen = new canvaslib.DisplayContainer("the_screen");
-  var bitmap;
+  screen = new Stage("the_screen")
 
-  canvaslib.StackedLoader.load("image_id", "image", "logo.png");
-  canvaslib.StackedLoader.load("another_image", "image", "foo.png");
-  canvaslib.StackedLoader.load("and_another_one", "image", "bar.png");
+  StackedLoader.add "image_id", "image", "logo.png"
+  StackedLoader.add "another_image", "image", "foo.png"
+  StackedLoader.add "and_another_one", "image", "bar.png"
 
-  canvaslib.StackedLoader.start(onLoadComplete);
+  StackedLoader.load =>
+    bitmap = StackedLoader.get "image_id"
 
-  function onLoadComplete() {
-    bitmap = canvaslib.StackedLoader.get("image_id");
-
-    screen.addChild(bitmap);
-    screen.draw();
-  }
+    screen.addChild bitmap
+    screen.render
 
 The +load+ function adds an asset to the loadstack. The +start+ function triggers the StackedLoader to load all assets that are placed in the load stack.
 
@@ -139,17 +116,17 @@ The +load+ function adds an asset to the loadstack. The +start+ function trigger
 You can use the +canvaslib.Tween+ class to tween objects between two points.
 
   ...
-  var renderer = new canvaslib.Renderer(mainDisplayObj);
-  renderer.run(25);
+  renderer = new Renderer(stage);
+  renderer.run 25
 
   ...
-  canvaslib.Tween.to(someShape, 5000, { x: 100, y: 100 });
+  Tween.to someShape, 5000, { x: 100, y: 100 }
 
 The above example will tween the +x+ & +y+ property of object +someShape+ to coordinate 100 in 5 secs.
 
 Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.Renderer+ or call the +canavslib.Tween+ +update+ method yourself:
 
-  canavaslib.Tween.update();
+  Tween.update()
 
 == Mouse interaction
 
@@ -158,34 +135,33 @@ You have a couple of mouse events to your disposal:
 * onMouseOut
 
 Example of tween and mouse interaction:
-  shape.onMouseOver = function() {
-    canvaslib.Tween.to(shape, 500, { alpha: .5 });
-  };
+  shape.onMouseOver = =>
+    Tween.to shape, 500, { alpha: .5 }
 
-  shape.onMouseOut = function() {
-    canvaslib.Tween.to(shape, 500, { alpha: 1 });
-  };
+  shape.onMouseOut = =>
+    Tween.to shape, 500, { alpha: 1 }
 
 == Pixel fun
 
-  pixels = canvaslib.PixelSprite();
-  pixels.drawPixel(0, 0, 'rgba(128, 128, 128, 1)');
-  pixels.drawPixel(1, 0, 'rgba(128, 128, 128, 1)');
-  pixels.drawPixel(2, 0, 'rgba(128, 128, 128, 1)');
-  pixels.drawPixel(0, 1, 'rgba(128, 128, 128, 1)');
-  pixels.drawPixel(0, 2, 'rgba(128, 128, 128, 1)');
-  pixels.drawPixel(0, 3, 'rgba(128, 128, 128, 1)');
-  pixels.submitPixel();
+  pixels = new PixelSprite()
+  pixels.drawPixel 0, 0, 'rgba(128, 128, 128, 1)'
+  pixels.drawPixel 1, 0, 'rgba(128, 128, 128, 1)'
+  pixels.drawPixel 2, 0, 'rgba(128, 128, 128, 1)'
+  pixels.drawPixel 0, 1, 'rgba(128, 128, 128, 1)'
+  pixels.drawPixel 0, 2, 'rgba(128, 128, 128, 1)'
+  pixels.drawPixel 0, 3, 'rgba(128, 128, 128, 1)'
 
-  screen.addChild(pixels);
+  pixels.submitPixel()
+
+  screen.addChild pixels
 
 Or even better, load a retro sprite file!
 
-  canvaslib.StackedLoader.load('logo', 'sprite', 'logo.spr');
-  canvaslib.StackedLoader.start( function() {
-    logo = canvaslib.StackedLoader.get('logo');
-    screen.addChild(logo);
-  });
+  StackedLoader.add 'logo', 'sprite', 'logo.spr'
+
+  StackedLoader.load =>
+    logo = StackedLoader.get 'logo'
+    screen.addChild logo
 
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!

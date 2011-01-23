@@ -57,7 +57,7 @@ class Stage
       @childrenChanged = false
 
     @drawAllChildren()
-    #@handleMouseEventsOfAllChildren()
+    @handleMouseEventsOfAllChildren()
 
   setupContext: (context, child) ->
     context.globalAlpha = child.alpha
