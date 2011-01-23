@@ -68,7 +68,7 @@ class Shape extends DisplayObject
     @drawingCommands.push [false, 'beginPath']
     this
 
-  endPath: ->
+  closePath: ->
     @drawingCommands.push [false, 'closePath']
     this
 

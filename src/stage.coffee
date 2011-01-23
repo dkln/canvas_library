@@ -10,6 +10,7 @@ class Stage
     @mouseX = 0
     @mouseY = 0
     @parent = null
+    @isMouseSetup = false
     @oldMouseX = 0
     @oldMouseY = 0
     @children = []
@@ -19,6 +20,9 @@ class Stage
     @hitBufferContext = @hitBufferCanvas.getContext('2d')
     @childrenChanged = false
     @allChildren = []
+    @canvasOffsetPosition = Utils.offsetPosition(@canvas)
+
+    window.onresize = => @handleWindowResize()
 
   cloneCanvas: ->
     canvas = document.createElement('canvas')
@@ -117,13 +121,13 @@ class Stage
   setupMouse: ->
     unless @isMouseSetup
       @isMouseSetup = true
-      @canvas.addEventListener 'mousemove', => @handleCanvasMouseMove
-      @canvas.addEventListener 'mousedown', => @handleCanvasMouseDown
-      @canvas.addEventListener 'mouseup', => @handleCanvasMouseUp
+      @canvas.addEventListener 'mousemove', (event) => @handleCanvasMouseMove(event)
+      @canvas.addEventListener 'mousedown', (event) => @handleCanvasMouseDown(event)
+      @canvas.addEventListener 'mouseup', (event) => @handleCanvasMouseUp(event)
 
   handleCanvasMouseMove: (event) ->
-    @mouseX = event.clientX - @canvas.offsetLeft
-    @mouseY = event.clientY - @canvas.offsetTop
+    @mouseX = event.clientX - @canvasOffsetPosition[0]
+    @mouseY = event.clientY - @canvasOffsetPosition[1]
     @oldMouseX = @mouseX
     @oldMouseY = @mouseY
     @onMouseMove() if @onMouseMove
@@ -167,3 +171,6 @@ class Stage
       objectUnderCursor.onMouseMove
 
     @lastObjectUnderCursor = objectUnderCursor
+
+  handleWindowResize: ->
+    @canvasOffsetPosition = Utils.offsetPosition(@canvas)

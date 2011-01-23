@@ -1,0 +1,16 @@
+body {
+  background-color: #aaa;
+}
+
+div {
+  position: absolute;
+  width: 644px;
+  height: 484px;
+  margin-left: -320px;
+  margin-top: -240px;
+  left: 50%;
+  top: 50%;
+  padding: 2px;
+  border: solid 2px #fff;
+  background-color: #fff;
+}

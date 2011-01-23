@@ -1,7 +1,8 @@
 (function() {
   var run;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   run = function() {
-    var logo, otherShape, renderer, someShape, stage;
+    var logo, mouseShape, otherShape, renderer, someShape, stage;
     stage = new Stage('test_canvas');
     logo = null;
     someShape = new Shape();
@@ -17,8 +18,21 @@
     otherShape.y = 10;
     otherShape.scaleX = 1;
     otherShape.scaleY = 1;
+    mouseShape = new Shape();
+    mouseShape.beginPath();
+    mouseShape.fillStyle('rgba(255, 0, 0, 1)');
+    mouseShape.circle(0, 0, 10);
+    mouseShape.closePath();
+    mouseShape.fill();
+    mouseShape.x = 300;
+    mouseShape.y = 300;
+    stage.onMouseMove = __bind(function() {
+      mouseShape.x = stage.mouseX;
+      return mouseShape.y = stage.mouseY;
+    }, this);
     stage.addChild(someShape);
     stage.addChild(otherShape);
+    stage.addChild(mouseShape);
     StackedLoader.add('logo', 'bitmap', 'logo.png');
     StackedLoader.load(function() {
       logo = StackedLoader.get('logo');

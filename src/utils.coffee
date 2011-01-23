@@ -7,3 +7,14 @@ class Utils
 
   @firstUpcase: (str) ->
     str.substr(0, 1).toUpperCase() + str.substr(1)
+
+  @offsetPosition: (obj) ->
+    top = 0
+    left = 0
+
+    while obj
+      left += obj.offsetLeft
+      top += obj.offsetTop
+      obj = obj.offsetParent
+
+    [left, top]

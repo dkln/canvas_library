@@ -22,8 +22,24 @@ run = ->
   otherShape.scaleX = 1
   otherShape.scaleY = 1
 
+  # make this shape follow the mouse
+  mouseShape = new Shape()
+  mouseShape.beginPath()
+  mouseShape.fillStyle 'rgba(255, 0, 0, 1)'
+  mouseShape.circle 0, 0, 10
+  mouseShape.closePath()
+  mouseShape.fill()
+
+  mouseShape.x = 300
+  mouseShape.y = 300
+
+  stage.onMouseMove = =>
+    mouseShape.x = stage.mouseX
+    mouseShape.y = stage.mouseY
+
   stage.addChild someShape
   stage.addChild otherShape
+  stage.addChild mouseShape
 
   # load an external bitmap
   StackedLoader.add 'logo', 'bitmap', 'logo.png'
