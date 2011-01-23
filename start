@@ -1,2 +1,0 @@
-#!/bin/sh
-coffee -w -b -o lib/ -c coffee_src/*.coffee
