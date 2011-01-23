@@ -2,6 +2,8 @@ run = ->
   # this is the screen
   stage = new Stage('test_canvas')
 
+  logo = null
+
   # create a rectangle
   someShape = new Shape()
   someShape.x = 0
@@ -22,6 +24,15 @@ run = ->
 
   stage.addChild someShape
   stage.addChild otherShape
+
+  # load an external bitmap
+  StackedLoader.add 'logo', 'bitmap', 'logo.png'
+  StackedLoader.load ->
+    logo = StackedLoader.get('logo')
+    stage.addChild logo
+
+    logo.alpha = 0
+    Tween.to logo, 10000, { alpha: 1 }
 
   # setup renderer and connect it to the stage and run at 25 fps
   renderer = new Renderer(stage, 25)

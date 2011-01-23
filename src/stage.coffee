@@ -36,9 +36,7 @@ class Stage
     this
 
   removeChild: (child) ->
-    i = @children.indexOf(child)
-
-    if i == -1
+    if i = @children.indexOf(child) == -1
       throw 'Child object not found on stage'
     else
       child.stage = null
@@ -60,7 +58,7 @@ class Stage
     @handleMouseEventsOfAllChildren()
 
   setupContext: (context, child) ->
-    context.globalAlpha = child.alpha
+    context.globalAlpha = child.calculatedAlpha
     context.translate parseInt(child.calculatedX), parseInt(child.calculatedY)
     context.rotate Utils.angleToRadians(child.calculatedRotation)
     context.scale child.calculatedScaleX, child.calculatedScaleY
@@ -112,7 +110,7 @@ class Stage
   getChildren: (fromParent, collectedChildren) ->
     for child in fromParent.children
       collectedChildren.push child
-      @getChildren(child, collectedChildren) if child.children && child.children.length > 0
+      @getChildren(child, collectedChildren) if child.children? && child.children.length > 0
 
     collectedChildren
 

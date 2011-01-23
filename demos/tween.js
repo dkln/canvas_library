@@ -1,8 +1,9 @@
 (function() {
   var run;
   run = function() {
-    var otherShape, renderer, someShape, stage;
+    var logo, otherShape, renderer, someShape, stage;
     stage = new Stage('test_canvas');
+    logo = null;
     someShape = new Shape();
     someShape.x = 0;
     someShape.y = 0;
@@ -18,6 +19,15 @@
     otherShape.scaleY = 1;
     stage.addChild(someShape);
     stage.addChild(otherShape);
+    StackedLoader.add('logo', 'bitmap', 'logo.png');
+    StackedLoader.load(function() {
+      logo = StackedLoader.get('logo');
+      stage.addChild(logo);
+      logo.alpha = 0;
+      return Tween.to(logo, 10000, {
+        alpha: 1
+      });
+    });
     renderer = new Renderer(stage, 25);
     renderer.run();
     Tween.to(someShape, 5000, {

@@ -1,4 +1,4 @@
-class Shape extends DisplayContainer
+class Shape extends DisplayObject
   constructor: ->
     super()
     @madeChanges = false
@@ -78,7 +78,6 @@ class Shape extends DisplayContainer
 
     @drawingCommands.push [true, 'rect', x, y, width, height]
     @drawingCommands.push [false, 'fillRect', x, y, width, height]
-
     this
 
   circle: (x, y, radius) ->
