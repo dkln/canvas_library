@@ -133,10 +133,12 @@ class Stage
     @onMouseMove() if @onMouseMove
 
   handleCanvasMouseDown: (event) ->
+    @onMouseDown() if @onMouseDown && !@mouseDown
     @mouseDown = true
 
   handleCanvasMouseUp: (event) ->
-    @mouseUp = false
+    @onMouseUp() if @onMouseUp && @mouseDown
+    @mouseDown = false
 
   mouseHasMoved: ->
     (@oldMouseX != @mouseX || @oldMouseY != @mouseY)

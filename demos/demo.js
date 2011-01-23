@@ -30,6 +30,14 @@
       mouseShape.x = stage.mouseX;
       return mouseShape.y = stage.mouseY;
     }, this);
+    stage.onMouseUp = __bind(function() {
+      if (logo) {
+        return Tween.to(logo, 500, {
+          x: stage.mouseX,
+          y: stage.mouseY
+        });
+      }
+    }, this);
     stage.addChild(someShape);
     stage.addChild(otherShape);
     stage.addChild(mouseShape);

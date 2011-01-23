@@ -37,6 +37,10 @@ run = ->
     mouseShape.x = stage.mouseX
     mouseShape.y = stage.mouseY
 
+  stage.onMouseUp = =>
+    if logo
+      Tween.to logo, 500, { x: stage.mouseX, y: stage.mouseY }
+
   stage.addChild someShape
   stage.addChild otherShape
   stage.addChild mouseShape
