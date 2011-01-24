@@ -52,7 +52,7 @@ Coffeescript:
 
 A DisplayContainer is an object that can hold other graphical objects. These graphical objects can be nested in eachother. Just like <div>'s in <div>'s.
 
-The +x+ and +y+ position of graphical objects are relative and are translated to canvas +x+ and +y+ positions during the rendering process. This rendering process can be triggered by calling the +draw()+ function on any displaycontainer.
+The +x+ and +y+ position of graphical objects are relative and are translated to canvas +x+ and +y+ positions during the rendering process. This rendering process can be triggered by calling the +draw+ function on any displaycontainer.
 
 Nesting objects:
   obj = new Shape()
@@ -77,7 +77,7 @@ Note: The stage is the main screen. This object also acts as an DisplayContainer
 
 == Drawing shapes
 
-The drawing API is almost the same as the Canvas drawing API. If you want to draw paths to the canvas, use the +canvaslib.Shape+ class.
+The drawing API is almost the same as the Canvas drawing API. If you want to draw paths to the canvas, use the +Shape+ class.
 
 Drawing rectangles:
   stage = new Stage("the_screen");
@@ -96,7 +96,7 @@ Drawing rectangles:
 
 == Loading and drawing bitmaps
 
-Bitmaps can easily be loaded with the +canavaslib.StackedLoader+ class. The +canvaslib.StackedLoader+ manages all your assets so you can preload images or audio assets before rendering all your stuff.
+Bitmaps can easily be loaded with the +canavaslib.StackedLoader+ class. The +StackedLoader+ manages all your assets so you can preload images or audio assets before rendering all your stuff.
   screen = new Stage("the_screen")
 
   StackedLoader.add "image_id", "image", "logo.png"
@@ -113,7 +113,7 @@ The +load+ function adds an asset to the loadstack. The +start+ function trigger
 
 == Animating objects
 
-You can use the +canvaslib.Tween+ class to tween objects between two points.
+You can use the +Tween+ class to tween objects between two points.
 
   ...
   renderer = new Renderer(stage);
@@ -124,7 +124,7 @@ You can use the +canvaslib.Tween+ class to tween objects between two points.
 
 The above example will tween the +x+ & +y+ property of object +someShape+ to coordinate 100 in 5 secs.
 
-Note: to use the tween engine, you'll need to set up a renderer with +canvaslib.Renderer+ or call the +canavslib.Tween+ +update+ method yourself:
+Note: to use the tween engine, you'll need to set up a renderer with +Renderer+ or call the +Tween+ +update+ method yourself:
 
   Tween.update()
 
