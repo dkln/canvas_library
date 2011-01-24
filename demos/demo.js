@@ -6,11 +6,13 @@
     stage = new Stage('test_canvas');
     logo = null;
     someShape = new Shape();
+    someShape.id = "someShape";
     someShape.x = 0;
     someShape.y = 0;
     someShape.fillStyle('rgba(0, 0, 0, 1)');
     someShape.fillRect(0, 0, 50, 50);
     otherShape = new Shape();
+    otherShape.id = "otherShape";
     otherShape.alpha = .5;
     otherShape.fillStyle('rgba(255, 0, 0, 1)');
     otherShape.fillRect(0, 0, 25, 25);
@@ -20,6 +22,7 @@
     otherShape.scaleY = 1;
     otherShape.mouseEnabled = true;
     mouseShape = new Shape();
+    mouseShape.id = "mouseShape";
     mouseShape.beginPath();
     mouseShape.fillStyle('rgba(255, 0, 0, 1)');
     mouseShape.circle(0, 0, 10);
@@ -32,6 +35,7 @@
       return mouseShape.y = stage.mouseY;
     }, this);
     text = new TextField();
+    text.id = "text";
     text.mouseEnabled = true;
     text.text = "canvas_library demo";
     text.x = 10;
