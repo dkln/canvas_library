@@ -21,6 +21,7 @@ run = ->
   otherShape.y = 10
   otherShape.scaleX = 1
   otherShape.scaleY = 1
+  otherShape.mouseEnabled = true
 
   # make this shape follow the mouse
   mouseShape = new Shape()
@@ -39,9 +40,18 @@ run = ->
 
   # some text
   text = new TextField()
+  text.mouseEnabled = true
   text.text = "canvas_library demo"
   text.x = 10
-  text.y = 470
+  text.y = 450
+
+  text.onMouseOver = =>
+    text.fillStyle = 'rgba(255, 0, 0, 1)'
+    console.log 'over'
+
+  text.onMouseOut = =>
+    text.fillStyle = 'rgba(0, 0, 0, 1)'
+    console.log 'out'
 
   stage.onMouseUp = =>
     if logo

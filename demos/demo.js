@@ -18,6 +18,7 @@
     otherShape.y = 10;
     otherShape.scaleX = 1;
     otherShape.scaleY = 1;
+    otherShape.mouseEnabled = true;
     mouseShape = new Shape();
     mouseShape.beginPath();
     mouseShape.fillStyle('rgba(255, 0, 0, 1)');
@@ -31,9 +32,18 @@
       return mouseShape.y = stage.mouseY;
     }, this);
     text = new TextField();
+    text.mouseEnabled = true;
     text.text = "canvas_library demo";
     text.x = 10;
-    text.y = 470;
+    text.y = 450;
+    text.onMouseOver = __bind(function() {
+      text.fillStyle = 'rgba(255, 0, 0, 1)';
+      return console.log('over');
+    }, this);
+    text.onMouseOut = __bind(function() {
+      text.fillStyle = 'rgba(0, 0, 0, 1)';
+      return console.log('out');
+    }, this);
     stage.onMouseUp = __bind(function() {
       if (logo) {
         Tween.kill(logo);

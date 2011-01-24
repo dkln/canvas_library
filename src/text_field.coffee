@@ -4,12 +4,20 @@ class TextField extends DisplayObject
     @textAlign = 'left'
     @strokeStyle = null
     @fillStyle = 'rgba(0, 0, 0, 1)'
-    @font = '20pt Arial'
+    @fontFace = 'Arial'
+    @fontSize = 20
     @maxWidth = null
     super()
 
   draw: (context, drawHitarea) ->
-    context.font = @font
-    context.strokeStyle = @strokeStyle if @strokeStyle?
-    context.fillStyle = @fillStyle if @fillStyle?
-    context.fillText @text, 0, 0
+    context.font = @fontSize + 'px ' + @fontFace
+    context.textBaseline = 'top'
+
+    if drawHitarea
+      context.beginPath()
+      context.rect 0, 0, context.measureText(@text).width, @fontSize
+      context.closePath()
+    else
+      context.strokeStyle = @strokeStyle
+      context.fillStyle = @fillStyle
+      context.fillText @text, 0, 0

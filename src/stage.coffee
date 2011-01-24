@@ -84,28 +84,23 @@ class Stage
         @context.restore()
 
   getObjectUnderCursor: ->
-    objectUnderCursor = null
-
     for child in @allChildren
       if child.calculatedVisibility && child.mouseEnabled
         @hitBufferContext.clearRect 0, 0, @canvas.width, @canvas.height
-        @hitBufferContext.save
+        @hitBufferContext.save()
 
         @setupContext @hitBufferContext, child
-
         child.draw @hitBufferContext, true
 
         child.localX = @mouseX - child.calculatedX
         child.localY = @mouseY - child.calculatedY
 
+        @hitBufferContext.restore()
+
         if @hitBufferContext.isPointInPath(@mouseX, @mouseY)
-          @hitBufferContext.restore
-          objectUnderCursor = child
-          break
+          return child
 
-        @hitBufferContext.restore
-
-    objectUnderCursor
+    null
 
   findAllChildren: ->
     @allChildren = []
@@ -126,10 +121,10 @@ class Stage
       @canvas.addEventListener 'mouseup', (event) => @handleCanvasMouseUp(event)
 
   handleCanvasMouseMove: (event) ->
-    @mouseX = event.clientX - @canvasOffsetPosition[0]
-    @mouseY = event.clientY - @canvasOffsetPosition[1]
     @oldMouseX = @mouseX
     @oldMouseY = @mouseY
+    @mouseX = event.clientX - @canvasOffsetPosition[0]
+    @mouseY = event.clientY - @canvasOffsetPosition[1]
     @onMouseMove() if @onMouseMove
 
   handleCanvasMouseDown: (event) ->
@@ -147,7 +142,7 @@ class Stage
     @canvas.style.cursor = showHand ? 'pointer' : ''
 
   handleMouseEventsOfAllChildren: ->
-    objectUnderCursor = @getObjectUnderCursor
+    objectUnderCursor = @getObjectUnderCursor()
 
     if @lastObjectUnderCursor != objectUnderCursor
       if @lastObjectUnderCursor
@@ -157,7 +152,7 @@ class Stage
           @setHandCursor false
 
       if objectUnderCursor
-        objectUnderCursor.onMouseOver if objectUnderCursor.onMouseOver
+        objectUnderCursor.onMouseOver() if objectUnderCursor.onMouseOver
 
         if objectUnderCursor.onMouseDown && !objectUnderCursor.mouseDown
           objectUnderCursor.mouseDown = true
@@ -170,7 +165,7 @@ class Stage
         @setHandCursor objectUnderCursor.useHandCursor
 
     else if objectUnderCursor && @mouseHasMoved() && objectUnderCursor.onMouseMove
-      objectUnderCursor.onMouseMove
+      objectUnderCursor.onMouseMove()
 
     @lastObjectUnderCursor = objectUnderCursor
 
