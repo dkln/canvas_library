@@ -8,6 +8,7 @@ class Utils
   @firstUpcase: (str) ->
     str.substr(0, 1).toUpperCase() + str.substr(1)
 
+  # FIXME not working when scrolled
   @offsetPosition: (obj) ->
     top = 0
     left = 0

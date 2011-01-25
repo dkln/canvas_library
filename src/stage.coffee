@@ -83,6 +83,7 @@ class Stage
         child.draw @context
         @context.restore()
 
+  # FIXME Not working properly. Every object now is placed under cursor.
   getObjectUnderCursor: ->
     for child in @allChildren
       if child.calculatedVisibility && child.mouseEnabled
@@ -141,6 +142,7 @@ class Stage
   setHandCursor: (showHand) ->
     @canvas.style.cursor = showHand ? 'pointer' : ''
 
+  # FIXME/TODO not working properly
   handleMouseEventsOfAllChildren: ->
     objectUnderCursor = @getObjectUnderCursor()
 
