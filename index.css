@@ -1,0 +1,58 @@
+@charset "UTF-8";
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+body {
+  background-color: #fff;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+div {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  height: 300px;
+  margin-left: -200px;
+  margin-top: -150px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+h1 {
+  -moz-box-shadow: #666 1px 1px 3px 0;
+  -webkit-box-shadow: #666 1px 1px 3px 0;
+  -o-box-shadow: #666 1px 1px 3px 0;
+  box-shadow: #666 1px 1px 3px 0;
+  display: block;
+  font-weight: bold;
+  font-size: 45px;
+  color: #fff;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -o-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -khtml-border-radius: 12px;
+  border-radius: 12px;
+  padding: 5px 10px;
+  background-color: #000;
+  margin-bottom: 10px;
+}
