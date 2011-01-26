@@ -25,6 +25,12 @@ run = ->
   otherShape.scaleY = 1
   otherShape.mouseEnabled = true
 
+  otherShape.onMouseOver = =>
+    Tween.to otherShape, 500, { scaleX: 2, scaleY: 2 }
+
+  otherShape.onMouseOut = =>
+    Tween.to otherShape, 500, { scaleX: 1, scaleY: 1 }
+
   # make this shape follow the mouse
   mouseShape = new Shape()
   mouseShape.id = "mouseShape"
@@ -51,11 +57,9 @@ run = ->
 
   text.onMouseOver = =>
     text.fillStyle = 'rgba(255, 0, 0, 1)'
-    console.log 'over'
 
   text.onMouseOut = =>
     text.fillStyle = 'rgba(0, 0, 0, 1)'
-    console.log 'out'
 
   stage.onMouseUp = =>
     if logo

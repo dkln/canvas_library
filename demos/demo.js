@@ -21,6 +21,18 @@
     otherShape.scaleX = 1;
     otherShape.scaleY = 1;
     otherShape.mouseEnabled = true;
+    otherShape.onMouseOver = __bind(function() {
+      return Tween.to(otherShape, 500, {
+        scaleX: 2,
+        scaleY: 2
+      });
+    }, this);
+    otherShape.onMouseOut = __bind(function() {
+      return Tween.to(otherShape, 500, {
+        scaleX: 1,
+        scaleY: 1
+      });
+    }, this);
     mouseShape = new Shape();
     mouseShape.id = "mouseShape";
     mouseShape.beginPath();

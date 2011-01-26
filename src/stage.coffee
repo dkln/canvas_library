@@ -85,13 +85,21 @@ class Stage
 
   # FIXME Not working properly. Every object now is placed under cursor.
   getObjectUnderCursor: ->
-    for child in @allChildren
+    i = @allChildren.length - 1
+
+    while i >= 0
+      child = @allChildren[i]
+
       if child.calculatedVisibility && child.mouseEnabled
         @hitBufferContext.clearRect 0, 0, @canvas.width, @canvas.height
         @hitBufferContext.save()
 
         @setupContext @hitBufferContext, child
+        @hitBufferContext.beginPath()
+
         child.draw @hitBufferContext, true
+
+        @hitBufferContext.closePath()
 
         child.localX = @mouseX - child.calculatedX
         child.localY = @mouseY - child.calculatedY
@@ -101,7 +109,7 @@ class Stage
         if @hitBufferContext.isPointInPath(@mouseX, @mouseY)
           return child
 
-    null
+      i--
 
   findAllChildren: ->
     @allChildren = []
