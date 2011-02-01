@@ -125,9 +125,9 @@ class Stage
   setupMouse: ->
     unless @isMouseSetup
       @isMouseSetup = true
-      @canvas.addEventListener 'mousemove', (event) => @handleCanvasMouseMove(event)
-      @canvas.addEventListener 'mousedown', (event) => @handleCanvasMouseDown(event)
-      @canvas.addEventListener 'mouseup', (event) => @handleCanvasMouseUp(event)
+      @canvas.addEventListener 'mousemove', ((event) => @handleCanvasMouseMove(event)), false
+      @canvas.addEventListener 'mousedown', ((event) => @handleCanvasMouseDown(event)), false
+      @canvas.addEventListener 'mouseup', ((event) => @handleCanvasMouseUp(event)), false
 
   handleCanvasMouseMove: (event) ->
     @oldMouseX = @mouseX

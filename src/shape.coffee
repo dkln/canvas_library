@@ -84,9 +84,9 @@ class Shape extends DisplayObject
     @arc x, y, radius / 2, 0, Math.PI * 2, true
     this
 
-  arc: (x, y, sr, er, cw) ->
+  arc: (x, y, r, sr, er, cw) ->
     @madeChanges = true
-    @drawingCommands.push [true, 'arc', x, y, sr, er, cw]
+    @drawingCommands.push [true, 'arc', x, y, r, sr, er, cw]
     this
 
   strokeRect: (x, y, width, height, color) ->
