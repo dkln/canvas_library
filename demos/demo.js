@@ -53,12 +53,10 @@
     text.x = 10;
     text.y = 450;
     text.onMouseOver = __bind(function() {
-      text.fillStyle = 'rgba(255, 0, 0, 1)';
-      return console.log('over');
+      return text.fillStyle = 'rgba(255, 0, 0, 1)';
     }, this);
     text.onMouseOut = __bind(function() {
-      text.fillStyle = 'rgba(0, 0, 0, 1)';
-      return console.log('out');
+      return text.fillStyle = 'rgba(0, 0, 0, 1)';
     }, this);
     stage.onMouseUp = __bind(function() {
       if (logo) {

@@ -18,6 +18,6 @@ class TextField extends DisplayObject
       context.rect 0, 0, context.measureText(@text).width, @fontSize
       context.closePath()
     else
-      context.strokeStyle = @strokeStyle
-      context.fillStyle = @fillStyle
+      context.strokeStyle = @strokeStyle if @strokeStyle
+      context.fillStyle = @fillStyle if @fillStyle
       context.fillText @text, 0, 0
