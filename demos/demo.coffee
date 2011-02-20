@@ -51,6 +51,7 @@ run = ->
   text = new TextField()
   text.id = "text"
   text.mouseEnabled = true
+  text.useHandCursor = true
   text.text = "canvas_library demo"
   text.x = 10
   text.y = 450

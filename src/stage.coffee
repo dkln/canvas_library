@@ -95,6 +95,8 @@ class Stage
 
       i--
 
+    null
+
   findAllChildren: ->
     @allChildren = []
     @getChildren this, @allChildren
