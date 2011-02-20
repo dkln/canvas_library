@@ -2,7 +2,7 @@
   var run;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   run = function() {
-    var logo, mouseShape, otherShape, renderer, someShape, stage, text;
+    var logo, moreShape1, moreShape2, moreShapes, mouseShape, otherShape, renderer, someShape, stage, text;
     stage = new Stage('test_canvas');
     logo = null;
     someShape = new Shape();
@@ -67,10 +67,30 @@
         });
       }
     }, this);
+    moreShapes = new Sprite();
+    moreShapes.x = 0;
+    moreShapes.y = 0;
+    moreShape1 = new Shape();
+    moreShape1.id = "moreShape1";
+    moreShape1.fillStyle('rgba(0, 255, 0, 1)');
+    moreShape1.fillRect(0, 0, 50, 50);
+    moreShape2 = new Shape();
+    moreShape2.x = 10;
+    moreShape2.y = 10;
+    moreShape2.fillStyle('rgba(0, 255, 255, 1)');
+    moreShape2.fillRect(0, 0, 50, 50);
     stage.addChild(someShape);
     stage.addChild(otherShape);
     stage.addChild(mouseShape);
     stage.addChild(text);
+    stage.addChild(moreShapes);
+    moreShapes.addChild(moreShape1);
+    moreShapes.addChild(moreShape2);
+    Tween.to(moreShapes, 5000, {
+      x: 500,
+      y: 10,
+      rotation: 45
+    });
     StackedLoader.add('logo', 'bitmap', 'logo.png');
     StackedLoader.load(function() {
       logo = StackedLoader.get('logo');

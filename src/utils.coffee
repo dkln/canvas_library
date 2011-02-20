@@ -19,3 +19,10 @@ class Utils
       obj = obj.offsetParent
 
     [left, top]
+
+extend = (obj, mixin) ->
+  for name, method of mixin
+    obj[name] = method
+
+include = (klass, mixin) ->
+  extend klass.prototype, mixin

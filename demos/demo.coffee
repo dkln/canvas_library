@@ -66,10 +66,31 @@ run = ->
       Tween.kill logo
       Tween.to logo, 500, { x: stage.mouseX, y: stage.mouseY }
 
+  moreShapes = new Sprite()
+  moreShapes.x = 0
+  moreShapes.y = 0
+
+  moreShape1 = new Shape()
+  moreShape1.id = "moreShape1"
+  moreShape1.fillStyle 'rgba(0, 255, 0, 1)'
+  moreShape1.fillRect 0, 0, 50, 50
+
+  moreShape2 = new Shape()
+  moreShape2.x = 10
+  moreShape2.y = 10
+  moreShape2.fillStyle 'rgba(0, 255, 255, 1)'
+  moreShape2.fillRect 0, 0, 50, 50
+
   stage.addChild someShape
   stage.addChild otherShape
   stage.addChild mouseShape
   stage.addChild text
+  stage.addChild moreShapes
+
+  moreShapes.addChild moreShape1
+  moreShapes.addChild moreShape2
+
+  Tween.to moreShapes, 5000, { x: 500, y: 10, rotation: 45 }
 
   # load an external bitmap
   StackedLoader.add 'logo', 'bitmap', 'logo.png'

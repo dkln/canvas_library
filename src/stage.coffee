@@ -1,5 +1,7 @@
 class Stage
   constructor: (@canvasId) ->
+    @stage = this
+    @children = []
     @scaleX = 1
     @scaleY = 1
     @rotation = 0
@@ -30,26 +32,6 @@ class Stage
     canvas.height = @canvas.height
     canvas
 
-  addChild: (child) ->
-    child.parent.removeChild(child) if child.parent
-
-    @childrenChanged = true
-    child.parent = this
-    child.stage = this
-    @children.push child
-    this
-
-  removeChild: (child) ->
-    if i = @children.indexOf(child) == -1
-      throw 'Child object not found on stage'
-    else
-      child.stage = null
-      child.parent = null
-      @childrenChanged = true
-      @children.splice(i, 1)
-
-    this
-
   render: (clear) ->
     @setupMouse()
     @context.clearRect 0, 0, @canvas.width, @canvas.height
@@ -63,9 +45,11 @@ class Stage
 
   setupContext: (context, child) ->
     context.globalAlpha = child.calculatedAlpha
-    context.translate parseInt(child.calculatedX), parseInt(child.calculatedY)
-    context.rotate Utils.angleToRadians(child.calculatedRotation)
-    context.scale child.calculatedScaleX, child.calculatedScaleY
+
+    for object in child.translatedObjects
+      context.translate object.x, object.y
+      context.rotate Utils.angleToRadians(object.rotation)
+      context.scale object.scaleX, object.scaleY
 
     if child.shadow
       context.shadowBlur = child.shadowBlur
@@ -181,3 +165,8 @@ class Stage
 
   handleWindowResize: ->
     @canvasOffsetPosition = Utils.offsetPosition(@canvas)
+
+  positionChanged: ->
+    false
+
+include Stage, DisplayContainerMixin

@@ -4,8 +4,8 @@ class DisplayObject
 
     @x = 0
     @y = 0
-    @oldX = 0
-    @oldY = 0
+    @oldX = null
+    @oldY = null
     @calculatedX = 0
     @calculatedY = 0
 
@@ -18,19 +18,19 @@ class DisplayObject
 
     @scaleX = 1
     @scaleY = 1
-    @oldScaleX = 1
-    @oldScaleY = 1
+    @oldScaleX = null
+    @oldScaleY = null
     @calculatedScaleX = 1
     @calculatedScaleY = 1
 
     @rotation = 0
-    @oldRotation = 0
+    @oldRotation = null
     @calculatedRotation = 0
 
     @enabled = true
 
     @visible = true
-    @oldVisible = true
+    @oldVisible = null
     @calculatedVisibility = true
 
     @mouseEnabled = false
@@ -55,6 +55,8 @@ class DisplayObject
     @lastObjectUnderCursor = null
     @stage = null
     @parent = null
+    @ancestors = null
+    @translatedObjects = null
     @childrenChanged = false
 
   draw: (context, drawHitarea) ->
@@ -64,9 +66,6 @@ class DisplayObject
     if @positionChanged()
       @oldX = @x
       @oldY = @y
-      @oldRotation = @rotation
-      @oldScaleX = @scaleX
-      @oldScaleY = @scaleY
       @oldVisible = @visible
       @oldAlpha = @alpha
 
@@ -74,34 +73,30 @@ class DisplayObject
 
       @calculatedX = newVars[0]
       @calculatedY = newVars[1]
-      @calculatedRotation = newVars[2]
-      @calculatedScaleX = newVars[3]
-      @calculatedScaleY = newVars[4]
-      @calculatedVisibility = newVars[5]
-      @calculatedAlpha = newVars[6]
+      @calculatedVisibility = newVars[2]
+      @calculatedAlpha = newVars[3]
 
   getInheritedTranslatedVars: ->
     theParent = this
     translatedX = 0
     translatedY = 0
-    translatedRotation = 0
-    translatedScaleX = 1
-    translatedScaleY = 1
     translatedVisibility = true
     translatedAlpha = 1
 
-    while !(theParent == null || theParent == @stage)
+    while theParent
       translatedX += theParent.x
       translatedY += theParent.y
-      translatedRotation += theParent.rotation
-      translatedScaleX *= theParent.scaleX
-      translatedScaleY *= theParent.scaleY
       translatedVisibility = false if !theParent.visible
       translatedAlpha *= theParent.alpha
 
       theParent = theParent.parent
 
-    [translatedX, translatedY, translatedRotation, translatedScaleX, translatedScaleY, translatedVisibility, translatedAlpha]
+    [translatedX, translatedY, translatedVisibility, translatedAlpha]
 
   positionChanged: ->
-    @x != @oldX || @y != @oldY || @rotation != @oldRotation || @scaleX != @oldScaleX || @scaleY != @oldScaleY || @visible != @oldVisible || @alpha != @oldAlpha
+    @x != @oldX || @y != @oldY || @rotation != @oldRotation || @scaleX != @oldScaleX || @scaleY != @oldScaleY || @visible != @old || @ancestorsPositionChanged()
+
+  ancestorsPositionChanged: ->
+    for ancestor in @ancestors
+      return true if ancestor.positionChanged()
+    false
