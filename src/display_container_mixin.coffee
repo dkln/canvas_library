@@ -33,3 +33,6 @@ class DisplayContainerMixin
       theParent = theParent.parent
 
     true
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.DisplayContainerMixin = DisplayContainerMixin

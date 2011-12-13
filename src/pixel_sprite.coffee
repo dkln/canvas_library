@@ -59,3 +59,6 @@ class PixelSprite extends Shape
           @fillRect(x * @pixelSize, y * @pixelSize, @pixelSize, @pixelSize, column) if column
           x++
       y++
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.PixelSprite = PixelSprite

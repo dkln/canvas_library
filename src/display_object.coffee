@@ -100,3 +100,6 @@ class DisplayObject
     for ancestor in @ancestors
       return true if ancestor.positionChanged()
     false
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.DisplayObject = DisplayObject

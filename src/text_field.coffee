@@ -21,3 +21,6 @@ class TextField extends DisplayObject
       context.strokeStyle = @strokeStyle if @strokeStyle
       context.fillStyle = @fillStyle if @fillStyle
       context.fillText @text, 0, 0
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.TextField = TextField

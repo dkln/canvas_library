@@ -172,3 +172,6 @@ class Stage
     false
 
 include Stage, DisplayContainerMixin
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Stage = Stage

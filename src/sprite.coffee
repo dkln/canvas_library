@@ -4,3 +4,6 @@ class Sprite extends Shape
     @children = []
 
 include Sprite, DisplayContainerMixin
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Sprite = Sprite

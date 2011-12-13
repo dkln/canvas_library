@@ -1,11 +1,11 @@
 run = ->
   # this is the screen
-  stage = new Stage('test_canvas')
+  stage = new CanvasLibrary.Stage('test_canvas')
 
   logo = null
 
   # create a rectangle
-  someShape = new Shape()
+  someShape = new CanvasLibrary.Shape()
   someShape.id = "someShape"
   someShape.x = 0
   someShape.y = 0
@@ -14,7 +14,7 @@ run = ->
   someShape.fillRect 0, 0, 50, 50
 
   # create another rectangle
-  otherShape = new Shape()
+  otherShape = new CanvasLibrary.Shape()
   otherShape.id = "otherShape"
   otherShape.alpha = .5
   otherShape.fillStyle 'rgba(255, 0, 0, 1)'
@@ -32,7 +32,7 @@ run = ->
     Tween.to otherShape, 500, { scaleX: 1, scaleY: 1 }
 
   # make this shape follow the mouse
-  mouseShape = new Shape()
+  mouseShape = new CanvasLibrary.Shape()
   mouseShape.id = "mouseShape"
   mouseShape.beginPath()
   mouseShape.fillStyle 'rgba(255, 0, 0, 1)'
@@ -48,7 +48,7 @@ run = ->
     mouseShape.y = stage.mouseY
 
   # some text
-  text = new TextField()
+  text = new CanvasLibrary.TextField()
   text.id = "text"
   text.mouseEnabled = true
   text.useHandCursor = true
@@ -67,16 +67,16 @@ run = ->
       Tween.kill logo
       Tween.to logo, 500, { x: stage.mouseX, y: stage.mouseY }
 
-  moreShapes = new Sprite()
+  moreShapes = new CanvasLibrary.Sprite()
   moreShapes.x = 0
   moreShapes.y = 0
 
-  moreShape1 = new Shape()
+  moreShape1 = new CanvasLibrary.Shape()
   moreShape1.id = "moreShape1"
   moreShape1.fillStyle 'rgba(0, 255, 0, 1)'
   moreShape1.fillRect 0, 0, 50, 50
 
-  moreShape2 = new Shape()
+  moreShape2 = new CanvasLibrary.Shape()
   moreShape2.x = 10
   moreShape2.y = 10
   moreShape2.fillStyle 'rgba(0, 255, 255, 1)'
@@ -95,7 +95,6 @@ run = ->
 
   # load an external bitmap
   StackedLoader.add 'logo', 'bitmap', 'logo.png'
-  #StackedLoader.add 'sprite', 'sprite', 'logo.spr'
 
   StackedLoader.load ->
     logo = StackedLoader.get('logo')
@@ -104,11 +103,8 @@ run = ->
     logo.alpha = 0
     Tween.to logo, 10000, { alpha: 1 }
 
-    #sprite = StackerLoader.get('sprite')
-    #stage.addChild sprite
-
   # setup renderer and connect it to the stage and run at 25 fps
-  renderer = new Renderer(stage, 25)
+  renderer = new CanvasLibrary.Renderer(stage, 25)
   renderer.run()
 
   # tween some stuff

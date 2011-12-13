@@ -26,3 +26,6 @@ extend = (obj, mixin) ->
 
 include = (klass, mixin) ->
   extend klass.prototype, mixin
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Utils = Utils

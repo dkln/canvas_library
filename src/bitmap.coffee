@@ -8,3 +8,6 @@ class Bitmap extends DisplayObject
         context.rect 0, 0, @imageData.width, @imageData.height
       else
         context.drawImage @imageData, 0, 0
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Bitmap = Bitmap

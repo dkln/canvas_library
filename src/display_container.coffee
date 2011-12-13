@@ -3,3 +3,6 @@ class DisplayContainer
     true
 
 include DisplayContainer, DisplayContainerMixin
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.DisplayContainer = DisplayContainer

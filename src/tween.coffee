@@ -50,3 +50,6 @@ class Tween
         i = -1
 
       i++
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Tween = Tween

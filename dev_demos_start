@@ -1,2 +1,0 @@
-#!/bin/sh
-coffee -w -c demos/*.coffee

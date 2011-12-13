@@ -76,3 +76,6 @@ class StackedLoader
   @handleAssetLoadComplete: ->
     @loadStack.splice 0, 1
     @loadNext()
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.StackedLoader = StackedLoader

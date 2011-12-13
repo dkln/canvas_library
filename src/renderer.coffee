@@ -32,3 +32,6 @@ class Renderer
     clearInterval @timer
     @running = false
     @timer = null
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Renderer = Renderer

@@ -15,10 +15,10 @@ HTML:
 Coffeescript:
   run = ->
     # this is the screen
-    stage = new Stage('test_canvas')
+    stage = new CanvasLibrary.Stage('test_canvas')
 
     # create a rectangle
-    someShape = new Shape()
+    someShape = new CanvasLibrary.Shape()
     someShape.x = 0
     someShape.y = 0
 
@@ -26,7 +26,7 @@ Coffeescript:
     someShape.fillRect 0, 0, 50, 50
 
     # create another rectangle
-    otherShape = new Shape()
+    otherShape = new CanvasLibrary.Shape()
     otherShape.alpha = .5
     otherShape.fillStyle 'rgba(255, 0, 0, 1)'
     otherShape.fillRect 0, 0, 25, 25
@@ -39,7 +39,7 @@ Coffeescript:
     stage.addChild otherShape
 
     # setup renderer and connect it to the stage and run at 25 fps
-    renderer = new Renderer(stage, 25)
+    renderer = new CanvasLibrary.Renderer(stage, 25)
     renderer.run()
 
     # tween some stuff
@@ -55,17 +55,17 @@ A DisplayContainer is an object that can hold other graphical objects. These gra
 The +x+ and +y+ position of graphical objects are relative and are translated to canvas +x+ and +y+ positions during the rendering process. This rendering process can be triggered by calling the +draw+ function on any displaycontainer.
 
 Nesting objects:
-  obj = new Shape()
+  obj = new CanvasLibrary.Shape()
   obj.x = 10
   obj.y = 10
 
-  otherObj = new Shape()
+  otherObj = new CanvasLibrary.Shape()
   otherObj.x = 0
   otherObj.y = 0
 
   obj.addChild otherObj
 
-  yetAnotherObj = new Shape()
+  yetAnotherObj = new CanvasLibrary.Shape()
   yetAnotherObj.x = 0
   yetAnotherObj.y = 0
 
@@ -80,9 +80,9 @@ Note: The stage is the main screen. This object also acts as an DisplayContainer
 The drawing API is almost the same as the Canvas drawing API. If you want to draw paths to the canvas, use the +Shape+ class.
 
 Drawing rectangles:
-  stage = new Stage("the_screen");
+  stage = new CanvasLibrary.Stage("the_screen");
 
-  rect = new Shape()
+  rect = new CanvasLibrary.Shape()
   rect.x = 0
   rect.y = 0
   rect.fillStyle "rgb(255, 0, 0, 1)"
@@ -97,14 +97,14 @@ Drawing rectangles:
 == Loading and drawing bitmaps
 
 Bitmaps can easily be loaded with the +canavaslib.StackedLoader+ class. The +StackedLoader+ manages all your assets so you can preload images or audio assets before rendering all your stuff.
-  screen = new Stage("the_screen")
+  screen = new CanvasLibrary.Stage("the_screen")
 
-  StackedLoader.add "image_id", "image", "logo.png"
-  StackedLoader.add "another_image", "image", "foo.png"
-  StackedLoader.add "and_another_one", "image", "bar.png"
+  CanvasLibrary.StackedLoader.add "image_id", "image", "logo.png"
+  CanvasLibrary.StackedLoader.add "another_image", "image", "foo.png"
+  CanvasLibrary.StackedLoader.add "and_another_one", "image", "bar.png"
 
-  StackedLoader.load =>
-    bitmap = StackedLoader.get "image_id"
+  CanvasLibrary.StackedLoader.load =>
+    bitmap = CanvasLibrary.StackedLoader.get "image_id"
 
     screen.addChild bitmap
     screen.render
@@ -116,7 +116,7 @@ The +load+ function adds an asset to the loadstack. The +start+ function trigger
 You can use the +Tween+ class to tween objects between two points.
 
   ...
-  renderer = new Renderer(stage);
+  renderer = new CanvasLibrary.Renderer(stage);
   renderer.run 25
 
   ...
@@ -143,7 +143,7 @@ Example of tween and mouse interaction:
 
 == Pixel fun
 
-  pixels = new PixelSprite()
+  pixels = new CanvasLibrary.PixelSprite()
   pixels.drawPixel 0, 0, 'rgba(128, 128, 128, 1)'
   pixels.drawPixel 1, 0, 'rgba(128, 128, 128, 1)'
   pixels.drawPixel 2, 0, 'rgba(128, 128, 128, 1)'
@@ -157,11 +157,18 @@ Example of tween and mouse interaction:
 
 Or even better, load a retro sprite file!
 
-  StackedLoader.add 'logo', 'sprite', 'logo.spr'
+  CanvasLibrary.StackedLoader.add 'logo', 'sprite', 'logo.spr'
 
-  StackedLoader.load =>
-    logo = StackedLoader.get 'logo'
+  CanvasLibrary.StackedLoader.load =>
+    logo = CanvasLibrary.StackedLoader.get 'logo'
     screen.addChild logo
+
+== Development
+
+Want to extend the library? If you are using rvm that should be a breeze!
+
+  bundle install
+  guard
 
 = License and credits
 Use it and have fun with it! Comments, cakes and hugs are welcome! Just stick to the license!

@@ -132,3 +132,6 @@ class Shape extends DisplayObject
           context[instruction]()
 
     @madeChanges = false
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.Shape = Shape

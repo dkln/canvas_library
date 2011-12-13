@@ -25,3 +25,6 @@ class TweenCommand
 
     for property of @toParams
       @object[property] = @startValues[property] + (factor * @toParams[property])
+
+@CanvasLibrary ||= {}
+@CanvasLibrary.TweenCommand = TweenCommand
