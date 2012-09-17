@@ -1,4 +1,4 @@
-class TextField extends DisplayObject
+class TextField extends CanvasLibrary.DisplayObject
   constructor: ->
     @text = ''
     @textAlign = 'left'

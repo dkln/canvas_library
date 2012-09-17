@@ -1,4 +1,4 @@
-class PixelSprite extends Shape
+class PixelSprite extends CanvasLibrary.Shape
   @defaultColorPalette: [ 'rgba(0, 0, 0, 1)',
                           'rgba(170, 0, 0, 1)',
                           'rgba(0, 170, 0, 1)',
@@ -61,4 +61,4 @@ class PixelSprite extends Shape
       y++
 
 @CanvasLibrary ||= {}
-@CanvasLibrary.PixelSprite = PixelSprite
+@CanvasLibrary.PixelSprite = CanvasLibrary.PixelSprite

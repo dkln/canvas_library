@@ -171,7 +171,7 @@ class Stage
   positionChanged: ->
     false
 
-include Stage, DisplayContainerMixin
+include Stage, CanvasLibrary.DisplayContainerMixin
 
 @CanvasLibrary ||= {}
 @CanvasLibrary.Stage = Stage

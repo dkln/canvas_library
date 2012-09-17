@@ -1,4 +1,4 @@
-class Shape extends DisplayObject
+class Shape extends CanvasLibrary.DisplayObject
   constructor: ->
     super()
     @madeChanges = false

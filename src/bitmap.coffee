@@ -1,4 +1,4 @@
-class Bitmap extends DisplayObject
+class Bitmap extends CanvasLibrary.DisplayObject
   constructor: (@imageData) ->
     super()
 

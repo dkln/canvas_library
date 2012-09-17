@@ -2,7 +2,7 @@ class DisplayContainer
   draw: (context, drawHitarea) ->
     true
 
-include DisplayContainer, DisplayContainerMixin
+include DisplayContainer, CanvasLibrary.DisplayContainerMixin
 
 @CanvasLibrary ||= {}
 @CanvasLibrary.DisplayContainer = DisplayContainer

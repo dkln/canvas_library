@@ -1,9 +1,9 @@
-class Sprite extends Shape
+class Sprite extends CanvasLibrary.Shape
   constructor: ->
     super()
     @children = []
 
-include Sprite, DisplayContainerMixin
+include Sprite, CanvasLibrary.DisplayContainerMixin
 
 @CanvasLibrary ||= {}
 @CanvasLibrary.Sprite = Sprite
